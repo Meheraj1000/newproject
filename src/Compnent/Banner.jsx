@@ -2,12 +2,12 @@ import React from "react";
 
 const Banner = () => {
   const slides = [
-    "https://s.agricare.club/uploads/image/2511/9b6ea9adb9de96.jpg",
-    "https://s.agricare.club/uploads/image/2511/18a94b6301beea.jpg",
-    "https://s.agricare.club/uploads/image/2511/37758fbfe245ba.jpg",
-    "https://s.agricare.club/uploads/image/2511/05409260b646f3.png",
-    "https://s.agricare.club/uploads/image/2510/df3fccbc7d9b20.jpg",
-    "https://s.agricare.club/uploads/image/2511/9b6ea9adb9de96.jpg"
+    "https://i.ibb.co.com/wn1G4WN/farm-workers-day.jpg",
+    "https://i.ibb.co.com/MyTyFZNP/360-F-745552793-haz9-CFRMu5m-K5m-Y0-Xi-LV9-Na0fxewu-FHR.jpg",
+    "https://i.ibb.co.com/prWM75X8/potato-plantations-grow-field-vegetable-rows-farming-agriculture-landscape-1-1200x795.jpg",
+    "https://i.ibb.co.com/gMk2K8zP/students-engage-various-activities-to-honor-national-agriculture-day-showcasing-beauty-farming-natur.webp",
+    "https://i.ibb.co.com/qFkgTB1B/1747063226-9.jpg",
+    "https://i.ibb.co.com/3yDdSHZH/bangladesh-november-25-2014-farmer-600nw-1474586672.webp"
   ];
 
   return (
