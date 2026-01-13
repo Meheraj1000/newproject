@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../AuthPage/AuthProvider";
 
-const Virtue = ({ virtues = [] }) => {
+const Virtue = () => {
+  const { user } = useContext(AuthContext);
   const [now, setNow] = useState(new Date());
   const [savedVirtues, setSavedVirtues] = useState([]);
 
@@ -13,24 +15,16 @@ const Virtue = ({ virtues = [] }) => {
     return () => clearInterval(timer);
   }, []);
 
-  /* ================= LOCAL STORAGE ================= */
+  /* ================= FETCH VIRTUES FROM CONTEXT / LOCAL STORAGE ================= */
   useEffect(() => {
-    if (virtues.length > 0) {
-      localStorage.setItem("virtuesData", JSON.stringify(virtues));
-      setSavedVirtues(virtues);
+    if (user?.virtues?.length > 0) {
+      setSavedVirtues(user.virtues);
+      localStorage.setItem("virtuesData", JSON.stringify(user.virtues));
     } else {
       const stored = localStorage.getItem("virtuesData");
       if (stored) setSavedVirtues(JSON.parse(stored));
     }
-  }, [virtues]);
-
-  /* ================= FUNCTION TO CALCULATE TIME AGO ================= */
-  const timeAgo = (purchaseDate) => {
-    const diffMs = now.getTime() - purchaseDate.getTime();
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60)) % 24;
-    return `${diffDays} দিন ${diffHours} ঘন্টা আগে`;
-  };
+  }, [user?.virtues]);
 
   return (
     <div className="w-full bg-gray-100 min-h-screen">
@@ -121,7 +115,7 @@ const Virtue = ({ virtues = [] }) => {
                 key={index}
                 className="relative bg-white p-4 shadow-md rounded-3xl mb-4"
               >
-                {/* Date Badge (Purchase Date & Time) */}
+                {/* Date Badge */}
                 <div className="absolute top-0 right-0 bg-red-500 text-white px-3 py-1 rounded-tr-3xl rounded-bl-3xl text-sm z-10">
                   📅 {purchaseDateString} ⏰ {purchaseTimeString}
                 </div>
@@ -163,7 +157,7 @@ const Virtue = ({ virtues = [] }) => {
                     </h3>
                     <p className="text-xs text-gray-500">
                       Working for {hoursWorked}{" "}
-                      {hoursWorked === 1 ? "Hour" : "Hours"} 
+                      {hoursWorked === 1 ? "Hour" : "Hours"}
                     </p>
                   </div>
                 </div>

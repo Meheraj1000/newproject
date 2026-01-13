@@ -1,33 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useLocation } from "react-router-dom";
+import { AuthContext } from "../AuthPage/AuthProvider";
+import Swal from "sweetalert2";
 
 const DepositPanding = () => {
+  const location = useLocation();
+  const { user } = useContext(AuthContext);
+
+  const amount = location.state?.amount || 500;
   const [method, setMethod] = useState("bkash");
   const [trxId, setTrxId] = useState("");
 
-  const walletNumber = "01806114664"; // screenshot wallet
+  const walletNumber = "01806114664";
 
   const handleSubmit = () => {
-    if (!trxId) {
-      alert("TrxID প্রদান করুন!");
+    if (!trxId.trim()) {
+      Swal.fire("Error", "TrxID প্রদান করুন!", "error");
       return;
     }
-    alert("জমা অনুরোধ সফলভাবে পাঠানো হয়েছে!");
+
+    // ✅ GLOBAL deposit request
+    const newDeposit = {
+      userPhone: user.phone,
+      amount: Number(amount),
+      trxId: trxId.trim(),
+      method,
+      status: "pending",
+      createdAt: new Date().toLocaleString(),
+    };
+
+    const allDeposits =
+      JSON.parse(localStorage.getItem("allDeposits")) || [];
+
+    allDeposits.push(newDeposit);
+    localStorage.setItem("allDeposits", JSON.stringify(allDeposits));
+
+    Swal.fire("Success", "জমা অনুরোধ পাঠানো হয়েছে", "success");
+    setTrxId("");
   };
 
   return (
     <div className="w-full max-w-xl mx-auto bg-white shadow-md rounded-b-lg pb-10">
 
-      {/* Top section */}
+      {/* TOP */}
       <div className="bg-green-600 text-center text-white py-5 rounded-b-3xl">
-        <p className="text-sm">অর্ডার আইডি: 838591109730219926</p>
-        <h1 className="text-4xl font-bold mt-2">৳ 500.00</h1>
+        <p className="text-sm">অর্ডার আইডি: {Date.now()}</p>
+        <h1 className="text-4xl font-bold mt-2">৳ {amount}.00</h1>
       </div>
 
-      {/* Payment channel */}
+      {/* METHOD */}
       <div className="px-4 mt-6">
         <p className="font-bold text-gray-700 mb-1">পেমেন্ট চ্যানেল</p>
-
-        <div className="flex items-center gap-5 mb-3">
+        <div className="flex gap-4 mb-3">
           <button
             onClick={() => setMethod("bkash")}
             className={`px-4 py-2 border rounded-full font-semibold ${
@@ -52,76 +76,55 @@ const DepositPanding = () => {
         </div>
       </div>
 
-      {/* Instructions */}
-      <div className="px-4">
-        <p className="text-sm font-semibold text-gray-800">
-          শুরু ২টি ধাপে, পেমেন্টটি সম্পন্ন করুন।
-        </p>
-
-        <p className="text-xs text-blue-600 cursor-pointer">
-          বিস্তারিত ব্যাখ্যা ›
-        </p>
-      </div>
-
-      {/* Step 1 */}
+      {/* STEP 1 */}
       <div className="px-4 mt-4 border border-green-400 rounded-lg p-4">
         <h3 className="font-semibold text-gray-700 mb-2">
-          ১) এই {method === "bkash" ? "bKash" : "Nagad"} নাম্বারে নিচের কাশআউট করুন
+          ১) এই {method === "bkash" ? "bKash" : "Nagad"} নাম্বারে কাশআউট করুন
         </h3>
 
         <div className="flex justify-between items-center bg-green-50 border p-3 rounded-lg">
           <div>
-            <p className="text-sm font-semibold text-gray-700">Wallet No*</p>
-            <p className="text-xl font-bold text-gray-900">{walletNumber}</p>
+            <p className="text-sm font-semibold">Wallet No*</p>
+            <p className="text-xl font-bold">{walletNumber}</p>
           </div>
-
-          {/* Copy button */}
           <button
-            className="px-4 py-1 text-sm bg-green-500 text-white rounded"
+            className="px-4 py-1 bg-green-500 text-white rounded"
             onClick={() => {
               navigator.clipboard.writeText(walletNumber);
-              alert("নম্বার কপি করা হয়েছে!");
+              Swal.fire("Copied!", "নম্বার কপি হয়েছে", "success");
             }}
           >
             কপি
           </button>
         </div>
-
-        <button className="w-full mt-3 text-sm bg-red-100 text-red-600 py-2 rounded">
-          কাশআউট দিয়ে পেমেন্ট করুন
-        </button>
       </div>
 
-      {/* Step 2 */}
+      {/* STEP 2 */}
       <div className="px-4 mt-4 border border-green-400 rounded-lg p-4">
         <h3 className="font-semibold text-gray-700 mb-2">
-          ২) কাশআউটটির TrxID নাম্বার লিখুন (প্রয়োজন)
+          ২) কাশআউটটির TrxID লিখুন
         </h3>
-
         <input
           type="text"
-          placeholder="TrxID অবশ্যই প্রদান করতে হবে"
+          placeholder="TrxID অবশ্যই দিতে হবে"
           className="w-full border p-3 rounded"
           value={trxId}
           onChange={(e) => setTrxId(e.target.value)}
         />
       </div>
 
-      {/* Submit Button */}
+      {/* SUBMIT */}
       <div className="px-4 mt-3">
         <button
           onClick={handleSubmit}
-          className="w-full bg-gray-300 text-gray-700 py-3 rounded font-bold disabled:opacity-60"
+          className="w-full bg-green-600 text-white py-3 rounded font-bold hover:bg-green-700"
         >
           জমা দিন
         </button>
       </div>
 
-      {/* Footer text */}
       <p className="text-xs text-gray-600 px-4 mt-4 leading-6">
-        গুরুত্বপূর্ণ: পেমেন্টটি সফলভাবে সম্পন্ন করার পর জমা অনুরোধটি পাঠান।
-        ভুল ট্রান্সফার হলে এগ্রিক কেয়ার দায়ী থাকবে না।  
-        আপনার কাশআউট রসিদের স্ক্রিনশট সংরক্ষণ করুন।
+        পেমেন্ট সফল হলে জমা অনুরোধ পাঠান। ভুল ট্রান্সফারের দায় কর্তৃপক্ষ নেবে না।
       </p>
     </div>
   );

@@ -11,16 +11,20 @@ const Banner = () => {
   ];
 
   return (
-    <section className="w-full p-4 bg-white shadow-md ">
-      <div className="carousel w-full rounded-md shadow-none">
+    <section className="w-full p-4 bg-white shadow-md">
+      <div className="carousel w-full rounded-md overflow-hidden">
         {slides.map((src, index) => {
           const slideId = `slide${index + 1}`;
           return (
-            <div key={index} id={slideId} className="carousel-item relative w-full">
+            <div
+              key={index}
+              id={slideId}
+              className="carousel-item relative w-full h-[400px]"
+            >
               <img
                 src={src}
                 alt={`Slide ${index + 1}`}
-                className=" w-full h-full object-contain"
+                className="w-full h-full object-cover"
               />
 
               {/* Dot Indicators */}
