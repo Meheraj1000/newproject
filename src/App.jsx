@@ -12,6 +12,9 @@ import Bonus from "./NavCompnent/Bonus";
 import Deposit from "./NavCompnent/Deposit";
 import News from "./NavCompnent/News";
 import Voucher from "./NavCompnent/Voucher";
+import Withdraw from "./NavCompnent/withdraw";
+import WithdrawPanding from "./NavCompnent/WithdrawPanding";
+import DepositPanding from "./NavCompnent/DepositPanding";
 
 import Virtue from "./FooterComponent/Virtue";
 import Share from "./FooterComponent/Share";
@@ -19,12 +22,8 @@ import Profile from "./FooterComponent/Profile";
 
 import Registration from "./AuthPage/Registration";
 import Login from "./AuthPage/Login";
-import Withdraw from "./NavCompnent/withdraw";
-import WithdrawPanding from "./NavCompnent/WithdrawPanding";
-import DepositPanding from "./NavCompnent/DepositPanding";
-
-import PrivateRoute from "./AuthPage/PrivateRoute";
 import Logout from "./AuthPage/Logout";
+import PrivateRoute from "./AuthPage/PrivateRoute";
 import { AuthContext } from "./AuthPage/AuthProvider";
 
 import Admin from "./Admin/Admin";
@@ -88,44 +87,47 @@ function App() {
         {/* NAV */}
         <Route path="/bonus" element={<PrivateRoute><Bonus /></PrivateRoute>} />
         <Route path="/deposit" element={<PrivateRoute><Deposit /></PrivateRoute>} />
-        <Route
-          path="/depositPanding"
-          element={
-            <PrivateRoute>
-              <DepositPanding />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/depositPanding" element={<PrivateRoute><DepositPanding /></PrivateRoute>} />
         <Route path="/news" element={<PrivateRoute><News /></PrivateRoute>} />
         <Route path="/voucher" element={<PrivateRoute><Voucher /></PrivateRoute>} />
+        <Route path="/withdraw" element={<PrivateRoute><Withdraw /></PrivateRoute>} />
+        <Route path="/withdrawPanding" element={<PrivateRoute><WithdrawPanding /></PrivateRoute>} />
 
         {/* FOOTER */}
         <Route path="/virtue" element={<PrivateRoute><Virtue /></PrivateRoute>} />
         <Route path="/share" element={<PrivateRoute><Share /></PrivateRoute>} />
         <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
-        <Route path="/withdraw" element={<PrivateRoute><Withdraw /></PrivateRoute>} />
-        <Route path="/withdrawPanding" element={<PrivateRoute><WithdrawPanding /></PrivateRoute>} />
 
         {/* AUTH */}
         <Route path="/registration" element={<Registration />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
 
-        {/* ADMIN */}
-        {isAdmin && (
-          <>
-            <Route
-              path="/admin"
-              element={
-                <PrivateRoute>
-                  <Admin />
-                </PrivateRoute>
-              }
-            />
-            <Route path="/admin/users" element={<PrivateRoute><User /></PrivateRoute>} />
-            <Route path="/admin/products" element={<PrivateRoute><ProductsAdd /></PrivateRoute>} />
-          </>
-        )}
+        {/* ADMIN ROUTES */}
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute>
+              {isAdmin ? <Admin /> : <p>Access Denied</p>}
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <PrivateRoute>
+              {isAdmin ? <User /> : <p>Access Denied</p>}
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/products"
+          element={
+            <PrivateRoute>
+              {isAdmin ? <ProductsAdd /> : <p>Access Denied</p>}
+            </PrivateRoute>
+          }
+        />
       </Routes>
 
       {!isAuthPage && <Footer isAdmin={isAdmin} />}
