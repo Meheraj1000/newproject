@@ -56,16 +56,19 @@ const WithdrawPanding = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white p-6">
-      <h2 className="text-center text-2xl font-bold bg-green-500 text-white py-2">
+    <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
+      {/* Header */}
+      <h2 className="text-center text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-500 text-white py-2 rounded">
         টাকা তোলা
       </h2>
 
-      <div className="bg-green-100 p-4 mt-4 rounded">
-        <p className="font-bold">বর্তমান ব্যালেন্স</p>
-        <p className="text-2xl">Tk {user.balance}</p>
+      {/* Balance Info */}
+      <div className="bg-indigo-50 p-4 mt-4 rounded">
+        <p className="font-bold text-indigo-700">বর্তমান ব্যালেন্স</p>
+        <p className="text-2xl text-indigo-900 font-semibold">Tk {user.balance}</p>
       </div>
 
+      {/* Withdraw Info */}
       {withdrawInfo && (
         <div className="bg-gray-100 p-3 rounded mt-4 text-sm">
           <p>নাম: {withdrawInfo.name}</p>
@@ -75,17 +78,19 @@ const WithdrawPanding = () => {
         </div>
       )}
 
+      {/* Withdraw Amount Input */}
       <input
         type="number"
         placeholder="উত্তোলনের পরিমাণ"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        className="w-full border p-3 rounded mt-4"
+        className="w-full border p-3 rounded mt-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
       />
 
+      {/* Submit Button */}
       <button
         onClick={handleWithdraw}
-        className="w-full bg-green-500 text-white py-3 rounded mt-4 text-xl font-bold"
+        className="w-full bg-gradient-to-r from-indigo-600 to-purple-500 text-white py-3 rounded mt-4 text-xl font-bold hover:from-purple-500 hover:to-indigo-600 transition duration-300"
       >
         এখনই প্রত্যাহার করুন
       </button>

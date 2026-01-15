@@ -38,63 +38,70 @@ const Withdraw = () => {
 
   return (
     <div className="w-full max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
-      <h2 className="text-center text-2xl font-bold bg-green-500 text-white py-2 rounded">
+      {/* Header */}
+      <h2 className="text-center text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-500 text-white py-2 rounded">
         অ্যাকাউন্ট তথ্য
       </h2>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        {/* Name */}
         <input
           type="text"
           name="name"
           placeholder="আপনার নাম"
           value={form.name}
           onChange={handleChange}
-          className="w-full border p-3 rounded bg-gray-100"
+          className="w-full border p-3 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
+        {/* Bank */}
         <input
           type="text"
           name="bank"
           placeholder="bkash / nagad / rocket"
           value={form.bank}
           onChange={handleChange}
-          className="w-full border p-3 rounded bg-gray-100"
+          className="w-full border p-3 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
+        {/* Account */}
         <input
           type="text"
           name="account"
           placeholder="01XXXXXXXXX"
           value={form.account}
           onChange={handleChange}
-          className="w-full border p-3 rounded bg-gray-100"
+          className="w-full border p-3 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
+        {/* Mobile */}
         <input
           type="text"
           name="mobile"
           placeholder="+8801XXXXXXXX"
           value={form.mobile}
           onChange={handleChange}
-          className="w-full border p-3 rounded bg-gray-100"
+          className="w-full border p-3 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
+        {/* Captcha */}
         <div className="flex gap-3 items-center">
-          <span className="font-bold">{captcha}</span>
+          <span className="font-bold text-lg">{captcha}</span>
           <button
             type="button"
             onClick={() =>
               setCaptcha(Math.random().toString(36).substring(2, 8))
             }
-            className="text-blue-600"
+            className="text-indigo-600 font-semibold hover:underline"
           >
             Refresh
           </button>
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-green-500 text-white py-3 rounded text-xl font-bold"
+          className="w-full bg-gradient-to-r from-indigo-600 to-purple-500 text-white py-3 rounded text-xl font-bold hover:from-purple-500 hover:to-indigo-600 transition duration-300"
         >
           সংরক্ষণ করুন
         </button>
