@@ -12,7 +12,6 @@ const Registration = () => {
   const { register } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // Generate random 6-digit code
   const generateCode = () => {
     const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
     setCode(randomCode);
@@ -27,10 +26,7 @@ const Registration = () => {
       });
     }
 
-    // ---- LocalStorage Users ----
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-
-    // Check if phone exists already
     const exists = storedUsers.find((u) => u.phone === phone);
     if (exists) {
       return Swal.fire({
@@ -40,7 +36,6 @@ const Registration = () => {
       });
     }
 
-    // Create new user
     const newUser = {
       phone,
       password,
@@ -51,7 +46,6 @@ const Registration = () => {
       refCode,
     };
 
-    // Save user
     storedUsers.push(newUser);
     localStorage.setItem("users", JSON.stringify(storedUsers));
 
@@ -65,88 +59,62 @@ const Registration = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-5">
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 text-center">
+          রেজিস্ট্রেশন করুন
+        </h1>
 
-      {/* Top Banner */}
-      <div className="w-full h-48">
-        <img
-          src="https://i.ibb.co/YWCVxT2/agricare-banner1.jpg"
-          alt="banner"
-          className="w-full h-full object-cover"
+        {/* Inputs */}
+        <input
+          type="text"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="📱 মোবাইল নম্বর"
+          className="w-full p-3 rounded border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
-      </div>
-
-      <div className="max-w-4xl mx-auto mt-6 p-4">
-
-        {/* Phone */}
-        <div className="flex items-center bg-white p-3 rounded-md shadow mb-3">
-          <span className="text-gray-500 mr-2">📱</span>
-          <input
-            type="text"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="+880 মোবাইল"
-            className="w-full outline-none"
-          />
-        </div>
-
-        {/* Password */}
-        <div className="flex items-center bg-white p-3 rounded-md shadow mb-3">
-          <span className="text-gray-500 mr-2">🔒</span>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="পাসওয়ার্ড"
-            className="w-full outline-none"
-          />
-        </div>
-
-        {/* Referral code */}
-        <div className="flex items-center bg-white p-3 rounded-md shadow mb-3">
-          <span className="text-gray-500 mr-2">👤</span>
-          <input
-            type="text"
-            value={refCode}
-            onChange={(e) => setRefCode(e.target.value)}
-            placeholder="আমন্ত্রণ কোড"
-            className="w-full outline-none"
-          />
-        </div>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="🔒 পাসওয়ার্ড"
+          className="w-full p-3 rounded border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+        />
+        <input
+          type="text"
+          value={refCode}
+          onChange={(e) => setRefCode(e.target.value)}
+          placeholder="👤 আমন্ত্রণ কোড"
+          className="w-full p-3 rounded border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+        />
 
         {/* Captcha */}
-        <div className="flex gap-4 mb-4">
-          <div className="flex items-center bg-white p-3 rounded-md shadow w-full">
-            <span className="text-gray-500 mr-2">🔐</span>
-            <input
-              type="text"
-              value={code}
-              placeholder="ক্যাপচা"
-              readOnly
-              className="w-full outline-none"
-            />
-          </div>
-
+        <div className="flex gap-3">
+          <input
+            type="text"
+            value={code}
+            readOnly
+            placeholder="🔐 ক্যাপচা"
+            className="flex-1 p-3 rounded border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+          />
           <button
             onClick={generateCode}
-            className="bg-gray-100 px-4 py-3 rounded-md shadow text-green-600"
+            className="bg-teal-500 hover:bg-teal-600 text-white px-4 rounded"
           >
             কোড পান
           </button>
         </div>
 
-        {/* Sign up Button */}
+        {/* Buttons */}
         <button
           onClick={handleRegister}
-          className="w-full bg-green-500 text-white py-3 rounded-md mt-3"
+          className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 rounded font-semibold"
         >
           সাইন আপ
         </button>
-
-        {/* Back to Login */}
         <Link
           to="/login"
-          className="block w-full text-center border border-green-500 text-green-600 py-3 rounded-md mt-3"
+          className="w-full text-center block border border-teal-500 text-teal-700 dark:text-teal-400 py-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >
           লগইন এ ফিরে যান
         </Link>

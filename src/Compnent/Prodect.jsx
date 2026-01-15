@@ -7,25 +7,30 @@ const Prodect = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // ================= LOAD PRODUCTS FROM prodect.json =================
     fetch("prodect.json")
-      .then(res => res.json())
-      .then(data => {
-        const storedProducts = JSON.parse(localStorage.getItem("products")) || [];
-        // Merge JSON products + Admin-added products
+      .then((res) => res.json())
+      .then((data) => {
+        const storedProducts =
+          JSON.parse(localStorage.getItem("products")) || [];
         setProducts([...data, ...storedProducts]);
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   }, []);
 
-  // ================= HANDLE BUY REQUEST =================
   const handleBuyRequest = (item) => {
     if (user.balance < Number(item.price)) {
       Swal.fire({
         icon: "error",
         title: "অপর্যাপ্ত ব্যালেন্স!",
-        html: `<p style="margin-bottom:10px;">প্রথমে টাকা জমা দিন।</p>
-          <a href="/deposit" style="display:inline-block;background:#16a34a;color:white;padding:8px 15px;border-radius:8px;font-weight:bold;text-decoration:none;">রিচার্জ করুন</a>`,
+        html: `
+          <p style="margin-bottom:10px;">প্রথমে টাকা জমা দিন।</p>
+          <a href="/deposit"
+             style="display:inline-block;background:#6366f1;color:white;
+             padding:8px 15px;border-radius:8px;font-weight:bold;
+             text-decoration:none;">
+             রিচার্জ করুন
+          </a>
+        `,
         showConfirmButton: false,
       });
       return;
@@ -36,6 +41,7 @@ const Prodect = () => {
       showCancelButton: true,
       cancelButtonText: "না",
       confirmButtonText: "হ্যাঁ",
+      confirmButtonColor: "#6366f1",
     }).then((result) => {
       if (result.isConfirmed) {
         const newRequest = {
@@ -46,7 +52,8 @@ const Prodect = () => {
           userPhone: user.phone,
         };
 
-        const allRequests = JSON.parse(localStorage.getItem("allRequests")) || [];
+        const allRequests =
+          JSON.parse(localStorage.getItem("allRequests")) || [];
         allRequests.push(newRequest);
         localStorage.setItem("allRequests", JSON.stringify(allRequests));
 
@@ -60,15 +67,17 @@ const Prodect = () => {
   };
 
   return (
-    <div className="p-3 md:p-5">
+    <div className="p-3 md:p-5 bg-gray-50 dark:bg-gray-900 min-h-screen">
       <div className="grid grid-cols-1 gap-4">
         {products.length === 0 ? (
-          <p className="text-center text-gray-500">কোনো পণ্য নেই।</p>
+          <p className="text-center text-gray-500 dark:text-gray-300">
+            কোনো পণ্য নেই।
+          </p>
         ) : (
           products.map((item, index) => (
             <div
               key={index}
-              className="rounded-lg shadow bg-white overflow-hidden border border-gray-100"
+              className="rounded-lg shadow bg-white dark:bg-gray-800 overflow-hidden border border-gray-200 dark:border-gray-700"
             >
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 p-4 relative">
                 <div className="flex gap-3 items-start sm:items-center flex-1">
@@ -77,16 +86,33 @@ const Prodect = () => {
                     alt={item.name}
                     className="w-20 h-16 sm:w-24 sm:h-20 object-cover rounded-md"
                   />
+
                   <div className="flex flex-col space-y-0.5 text-left text-sm">
-                    <h3 className="font-semibold text-base">{item.name}</h3>
-                    {item.years && <p>{item.years}</p>}
-                    <p>Tk {item.price}.00</p>
-                    {item.Day && <p>{item.Day}</p>}
+                    <h3 className="font-semibold text-base text-gray-800 dark:text-gray-100">
+                      {item.name}
+                    </h3>
+
+                    {item.years && (
+                      <p className="text-gray-600 dark:text-gray-300">
+                        {item.years}
+                      </p>
+                    )}
+
+                    <p className="text-indigo-600 dark:text-indigo-400 font-semibold">
+                      Tk {item.price}.00
+                    </p>
+
+                    {item.Day && (
+                      <p className="text-gray-600 dark:text-gray-300">
+                        {item.Day}
+                      </p>
+                    )}
                   </div>
                 </div>
+
                 {item.count && (
                   <div className="absolute top-2 right-2">
-                    <p className="text-xs font-semibold text-red-600">
+                    <p className="text-purple-600 font-semibold text-xs">
                       কোটা: {item.count}
                     </p>
                   </div>
@@ -96,7 +122,10 @@ const Prodect = () => {
               <div className="px-3 pb-3">
                 <button
                   onClick={() => handleBuyRequest(item)}
-                  className="bg-green-600 text-white w-full py-3 font-semibold text-sm rounded hover:bg-green-700"
+                  className="w-full py-3 font-semibold text-white rounded-lg
+                  bg-gradient-to-r from-indigo-600 to-purple-500
+                  hover:from-purple-500 hover:to-indigo-600
+                  transition duration-300"
                 >
                   কিনুন: {item.price}
                 </button>

@@ -16,8 +16,11 @@ const Bonus = () => {
     <div className="min-h-screen bg-gray-100 pb-20">
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-green-600 to-teal-400 text-white p-4 font-semibold shadow-md flex items-center justify-between relative">
-        <Link to="/" className="flex items-center gap-1 text-white text-lg hover:opacity-80">
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-500 text-white p-4 font-semibold shadow-md flex items-center justify-between relative">
+        <Link
+          to="/"
+          className="flex items-center gap-1 text-white text-lg hover:opacity-80"
+        >
           <span className="text-xl">←</span> ফিরে
         </Link>
 
@@ -30,7 +33,6 @@ const Bonus = () => {
 
       {/* TASKS SECTION */}
       <div className="py-2 px-3">
-
         {tasks.map((item, i) => (
           <div
             key={i}
@@ -54,15 +56,13 @@ const Bonus = () => {
                 সম্পূর্ণ হয়নি
               </h1>
 
-              <div className="px-3 sm:px-4 py-[3px] sm:py-1 border-2 border-green-600 text-center rounded-xl text-green-700 font-semibold text-[13px] sm:text-lg shadow-sm">
+              <div className="px-3 sm:px-4 py-[3px] sm:py-1 border-2 border-indigo-600 text-center rounded-xl text-indigo-700 font-semibold text-[13px] sm:text-lg shadow-sm">
                 0 / {item.members}
               </div>
             </div>
           </div>
         ))}
-
       </div>
-
     </div>
   );
 };

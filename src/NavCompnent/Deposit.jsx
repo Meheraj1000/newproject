@@ -24,7 +24,7 @@ const Deposit = () => {
   return (
     <div className="w-full bg-gray-100 min-h-screen pb-10">
       {/* Header */}
-      <div className="relative bg-gradient-to-r from-green-600 to-teal-400 text-white p-4 font-semibold shadow flex items-center justify-between">
+      <div className="relative bg-gradient-to-r from-indigo-600 to-purple-500 text-white p-4 font-semibold shadow flex items-center justify-between">
         <Link to="/" className="flex items-center gap-1 text-white text-lg">
           ← ফিরে
         </Link>
@@ -35,7 +35,7 @@ const Deposit = () => {
       </div>
 
       <div className="max-w-5xl mx-auto mt-6 p-4">
-        <div className="bg-gradient-to-r from-green-600 to-teal-400 text-white p-6 rounded-xl">
+        <div className="bg-gradient-to-r from-indigo-600 to-purple-500 text-white p-6 rounded-xl">
           <p className="text-lg">বর্তমান ব্যালেন্স</p>
           <h2 className="text-4xl font-bold mt-1">{amount || 0}</h2>
         </div>
@@ -45,7 +45,7 @@ const Deposit = () => {
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder="জমা পরিমাণ"
-          className="w-full border border-green-500 rounded-lg p-3 mt-5 text-lg"
+          className="w-full border border-indigo-500 rounded-lg p-3 mt-5 text-lg"
         />
 
         <div className="grid grid-cols-3 gap-4 mt-4">
@@ -55,7 +55,7 @@ const Deposit = () => {
               onClick={() => setAmount(amt)}
               className={`py-3 rounded-md font-semibold border ${
                 Number(amount) === amt
-                  ? "bg-green-500 text-white"
+                  ? "bg-indigo-600 text-white"
                   : "bg-white"
               }`}
             >
@@ -73,7 +73,7 @@ const Deposit = () => {
                 onClick={() => setPayType(method)}
                 className={`p-3 border rounded-lg cursor-pointer ${
                   payType === method
-                    ? "bg-green-500 text-white"
+                    ? "bg-indigo-600 text-white"
                     : ""
                 }`}
               >
@@ -89,7 +89,7 @@ const Deposit = () => {
           disabled={!isReady}
           className={`w-full py-3 mt-6 rounded-lg text-lg font-semibold ${
             isReady
-              ? "bg-gradient-to-r from-green-600 to-teal-400 text-white"
+              ? "bg-gradient-to-r from-indigo-600 to-purple-500 text-white"
               : "bg-gray-300"
           }`}
         >

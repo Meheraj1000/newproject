@@ -18,7 +18,7 @@ const Login = () => {
       });
     }
 
-    const result = login(phone, password); // AuthProvider login()
+    const result = login(phone, password);
 
     if (result.success) {
       Swal.fire({
@@ -26,7 +26,7 @@ const Login = () => {
         title: "সফলভাবে লগইন!",
         text: "আপনি সফলভাবে লগইন করেছেন।",
       }).then(() => {
-        navigate("/"); // লগইন হলে হোমে রিডাইরেক্ট
+        navigate("/");
       });
     } else {
       Swal.fire({
@@ -38,46 +38,41 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gray-100">
-      {/* Top Banner */}
-      <div className="w-full h-48">
-        <img
-          src="https://i.ibb.co/7rPXtpr/agricare-banner2.jpg"
-          alt="banner"
-          className="w-full h-full object-cover"
-        />
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
+      {/* Login Card */}
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 space-y-6 relative overflow-hidden">
+        
+        {/* Title */}
+        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white text-center">
+          লগইন করুন
+        </h1>
 
-      <div className="max-w-4xl mx-auto mt-6 p-4">
-
-        {/* Phone */}
-        <div className="flex items-center bg-white p-3 rounded-md shadow mb-3">
-          <span className="text-gray-500 mr-2">📱</span>
+        {/* Phone Input */}
+        <div className="relative z-0 w-full mb-5">
           <input
             type="text"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            placeholder="+880 মোবাইল"
-            className="w-full outline-none"
+            placeholder="📱 মোবাইল নম্বর"
+            className="w-full border-b-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-300 rounded transition"
           />
         </div>
 
-        {/* Password */}
-        <div className="flex items-center bg-white p-3 rounded-md shadow mb-2">
-          <span className="text-gray-500 mr-2">🔒</span>
+        {/* Password Input */}
+        <div className="relative z-0 w-full mb-2">
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="পাসওয়ার্ড"
-            className="w-full outline-none"
+            placeholder="🔒 পাসওয়ার্ড"
+            className="w-full border-b-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white p-3 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-300 rounded transition"
           />
         </div>
 
         {/* Forget Password */}
         <Link
           to="/forgot-password"
-          className="text-right text-sm text-gray-600 mb-3 block"
+          className="block text-right text-sm text-teal-700 dark:text-teal-400 hover:underline mb-4"
         >
           পাসওয়ার্ড মনে নেই?
         </Link>
@@ -85,15 +80,22 @@ const Login = () => {
         {/* Login Button */}
         <button
           onClick={handleLogin}
-          className="w-full bg-green-500 text-white py-3 rounded-md"
+          className="w-full bg-gradient-to-r from-teal-500 to-blue-500 hover:from-blue-500 hover:to-teal-500 text-white py-3 rounded-xl font-semibold shadow-md transition duration-300"
         >
           সাইন ইন
         </button>
 
+        {/* Divider */}
+        <div className="flex items-center justify-center text-gray-700 dark:text-gray-300 my-4">
+          <span className="border-b border-gray-300 w-1/3"></span>
+          <span className="mx-3">অথবা</span>
+          <span className="border-b border-gray-300 w-1/3"></span>
+        </div>
+
         {/* Sign Up Button */}
         <Link
           to="/registration"
-          className="w-full border border-green-500 text-green-600 py-3 rounded-md mt-3 block text-center"
+          className="w-full border  border-teal-500 text-teal-700 dark:text-teal-400 px-4  py-2 rounded-xl text-center font-semibold hover:bg-teal-100 dark:hover:bg-gray-700 transition"
         >
           সাইন আপ
         </Link>

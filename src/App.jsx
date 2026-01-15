@@ -41,26 +41,34 @@ function App() {
   useEffect(() => {
     if (location.pathname === "/") {
       Swal.fire({
-        html: `
-          <div style="text-align:center; font-family:'Arial'; padding:10px;">
-            <h2 style="font-size:24px; font-weight:bold;">সর্বশেষ ঘোষণা</h2>
-            <img src="https://s.agricare.club/uploads/image/2511/18a94b6301beea.jpg"
-                 style="width:280px;height:180px;border-radius:12px;object-fit:cover;margin-bottom:15px;" />
-            <p style="color:red;font-weight:bold;">৩০ ডিসেম্বর, ২০২৫</p>
-            <p style="color:#b91c1c;font-weight:bold;">
-              সকল অ-জৈব কৃষি পণ্যের মূলধন ফেরত
-            </p>
-            <p style="font-size:14px;color:#374151;">
-              সাত ধরণের জৈব কৃষি পণ্য বিনিয়োগের জন্য উপলব্ধ।<br/>
-              দৈনিক রিটার্ন ৭%-১২% পর্যন্ত পৌঁছাতে পারে।<br/>
-              রিটার্ন ৪০০ টাকায় পৌঁছালে টাকা তোলা সম্ভব।
-            </p>
-          </div>
-        `,
-        confirmButtonText: "OK",
-        confirmButtonColor: "#16a34a",
-        width: 420,
-      });
+  html: `
+    <div style="text-align:center;padding:10px;">
+      <h2 style="font-size:22px;font-weight:bold;color:#7c3aed;">সর্বশেষ ঘোষণা</h2>
+
+      <img
+        src="https://s.agricare.club/uploads/image/2511/18a94b6301beea.jpg"
+        style="width:100%;max-width:280px;height:180px;
+        border-radius:12px;object-fit:cover;margin:15px auto; border: 3px solid #7c3aed;"
+      />
+
+      <p style="color:#a78bfa;font-weight:bold;">৩০ ডিসেম্বর, ২০২৫</p>
+
+      <p style="color:#7c3aed;font-weight:bold;">
+        সকল অ-জৈব কৃষি পণ্যের মূলধন ফেরত
+      </p>
+
+      <p style="font-size:14px;color:#4b5563;">
+        ৭ ধরণের জৈব কৃষি পণ্য উপলব্ধ।<br/>
+        দৈনিক রিটার্ন ৭% – ১২% পর্যন্ত।<br/>
+        রিটার্ন ৪০০ টাকা হলে উত্তোলন সম্ভব।
+      </p>
+    </div>
+  `,
+  confirmButtonText: "ঠিক আছে",
+  confirmButtonColor: "#7c3aed", // Indigo/Purple button
+  width: 420,
+});
+
     }
   }, [location.pathname]);
 
