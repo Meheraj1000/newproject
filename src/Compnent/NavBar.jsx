@@ -6,7 +6,7 @@ const NavBar = () => {
     { to: "/deposit", label: "জমা", icon: "https://s.agricare.club/static/home/img/index_ico2.png?v=gf2" },
     { to: "/bonus", label: "বোনাস", icon: "https://s.agricare.club/static/home/img/index_ico6.png?v=gf2" },
     { to: "/voucher", label: "ভাউচার", icon: "https://s.agricare.club/static/home/img/index_ico3.png?v=gf2" },
-    { to: "/help", label: "অ্যাপ", icon: "https://s.agricare.club/static/home/img/index_ico4.png?v=gf2" }
+    { to: "https://t.me/+uo7WHq7dtQc4MWE1", label: "টেলিগ্রাম", icon: "https://i.ibb.co.com/1Gjkpms4/download-1.jpg" }
   ];
 
   return (
