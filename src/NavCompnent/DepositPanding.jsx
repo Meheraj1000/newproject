@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { AuthContext } from "../AuthPage/AuthProvider";
-import Swal from "sweetalert2";
+import Swal from "sweetalert2";   
 
 const DepositPanding = () => {
   const location = useLocation();
@@ -12,7 +12,7 @@ const DepositPanding = () => {
   const [method, setMethod] = useState("bkash"); // Default bKash
   const [trxId, setTrxId] = useState("");
 
-  const walletNumber = "01806114664";
+  const walletNumber = "01920933383";
 
   const handleSubmit = () => {
     if (!user) {
@@ -86,7 +86,7 @@ const DepositPanding = () => {
       {method !== "cash" && (
         <div className="px-4 mt-4 border border-indigo-400 rounded-lg p-4">
           <h3 className="font-semibold text-gray-700 mb-2">
-            ১) এই {getMethodLabel(method)} নাম্বারে কাশআউট করুন
+            ১) এই {getMethodLabel(method)} নাম্বারে সেন্ড মানি করুন
           </h3>
 
           <div className="flex justify-between items-center bg-indigo-50 border p-3 rounded-lg">
@@ -112,7 +112,7 @@ const DepositPanding = () => {
       {method !== "cash" && (
         <div className="px-4 mt-4 border border-indigo-400 rounded-lg p-4">
           <h3 className="font-semibold text-gray-700 mb-2">
-            ২) কাশআউটটির TrxID লিখুন
+            ২) সেন্ড মানি TrxID লিখুন
           </h3>
 
           <input

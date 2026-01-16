@@ -26,6 +26,12 @@ const WithdrawPanding = () => {
       return;
     }
 
+    // ✅ Minimum withdraw amount validation
+    if (Number(amount) < 500) {
+      alert("সর্বনিম্ন উত্তোলনের পরিমাণ ৫০০ টাকা!");
+      return;
+    }
+
     if (Number(amount) > Number(user.balance)) {
       alert("পর্যাপ্ত ব্যালেন্স নেই!");
       return;
@@ -65,7 +71,9 @@ const WithdrawPanding = () => {
       {/* Balance Info */}
       <div className="bg-indigo-50 p-4 mt-4 rounded">
         <p className="font-bold text-indigo-700">বর্তমান ব্যালেন্স</p>
-        <p className="text-2xl text-indigo-900 font-semibold">Tk {user.balance}</p>
+        <p className="text-2xl text-indigo-900 font-semibold">
+          Tk {user.balance}
+        </p>
       </div>
 
       {/* Withdraw Info */}
@@ -81,11 +89,17 @@ const WithdrawPanding = () => {
       {/* Withdraw Amount Input */}
       <input
         type="number"
-        placeholder="উত্তোলনের পরিমাণ"
+        min="500"
+        placeholder="উত্তোলনের পরিমাণ (সর্বনিম্ন ৫০০)"
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
         className="w-full border p-3 rounded mt-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
       />
+
+      {/* Hint Text */}
+      <p className="text-sm text-gray-500 mt-1">
+        সর্বনিম্ন উত্তোলনের পরিমাণ ৫০০ টাকা
+      </p>
 
       {/* Submit Button */}
       <button
