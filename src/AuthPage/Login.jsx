@@ -46,6 +46,7 @@ const Login = () => {
         <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white text-center">
           লগইন করুন
         </h1>
+        <p>p: 01920933383    admin@123</p>
 
         {/* Phone Input */}
         <div className="relative z-0 w-full mb-5">

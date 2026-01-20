@@ -2,12 +2,12 @@ import React, { useEffect, useState, useContext } from "react";
 import Swal from "sweetalert2";
 import { AuthContext } from "../AuthPage/AuthProvider";
 
-const Prodect = () => {
+const products = () => {
   const { user } = useContext(AuthContext);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("prodect.json")
+    fetch("products.json")
       .then((res) => res.json())
       .then((data) => {
         const storedProducts =
@@ -138,4 +138,4 @@ const Prodect = () => {
   );
 };
 
-export default Prodect;
+export default products;

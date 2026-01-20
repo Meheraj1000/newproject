@@ -5,7 +5,7 @@ import "./App.css";
 
 import Banner from "./Compnent/Banner";
 import NavBar from "./Compnent/NavBar";
-import Prodect from "./Compnent/Prodect";
+import Product from "./Compnent/Product";
 import Footer from "./Compnent/Footer";
 
 import Bonus from "./NavCompnent/Bonus";
@@ -142,7 +142,7 @@ function App() {
           path="/"
           element={
             <PrivateRoute>
-              <Prodect />
+              <Product />
             </PrivateRoute>
           }
         />
