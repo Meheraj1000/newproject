@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "./AuthProvider";
+import { loginApi } from "../api/services/authApi";
 
 const Login = () => {
   const [phone, setPhone] = useState("");
@@ -9,30 +10,29 @@ const Login = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    if (!phone || !password) {
-      return Swal.fire({
+  const handleLogin = async (e) => {
+    e.preventDefault(); // page reload বন্ধ করবে
+    // setLoading(true);
+    // setError("");
+
+    try {
+      const res = await loginApi({ mobile: phone, password });
+
+      if (res.success) {
+        Swal.fire({
+          icon: "success",
+          title: "সফলভাবে লগইন!",
+          text: "আপনি সফলভাবে লগইন করেছেন।",
+        }).then(() => {
+          navigate("/");
+        });
+      }
+
+    } catch (err) {
+      Swal.fire({
         icon: "error",
         title: "সমস্যা!",
-        text: "মোবাইল নম্বর এবং পাসওয়ার্ড পূরণ করুন।",
-      });
-    }
-
-    const result = login(phone, password);
-
-    if (result.success) {
-      Swal.fire({
-        icon: "success",
-        title: "সফলভাবে লগইন!",
-        text: "আপনি সফলভাবে লগইন করেছেন।",
-      }).then(() => {
-        navigate("/");
-      });
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "সমস্যা!",
-        text: result.message,
+        text: err?.response?.data?.errorSources[0]?.message,
       });
     }
   };
@@ -41,12 +41,11 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       {/* Login Card */}
       <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 space-y-6 relative overflow-hidden">
-        
+
         {/* Title */}
         <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white text-center">
           লগইন করুন
         </h1>
-        <p>p: 01920933383    admin@123</p>
 
         {/* Phone Input */}
         <div className="relative z-0 w-full mb-5">
