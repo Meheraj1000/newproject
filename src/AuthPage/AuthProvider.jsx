@@ -8,7 +8,7 @@ const ADMIN_PASSWORD = "admin@123";
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  
   // Load user on refresh
   useEffect(() => {
     const storedUser = localStorage.getItem("authUser");
