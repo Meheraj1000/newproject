@@ -61,7 +61,7 @@ const DepositPanding = () => {
       <div className="px-4 mt-6">
         <p className="font-bold text-gray-700 mb-1">পেমেন্ট চ্যানেল</p>
         <div className="flex gap-4 mb-3">
-          {["bkash", "nagad", "cash"].map((m) => (
+          {["bkash", "nagad"].map((m) => (
             <button
               key={m}
               onClick={() => setMethod(m)}
