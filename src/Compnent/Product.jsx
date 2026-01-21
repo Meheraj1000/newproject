@@ -1,21 +1,36 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { AuthContext } from "../AuthPage/AuthProvider";
+import { useAuth } from "../context/AuthContext";
+import { getProductApi } from "../api/services/productApi";
 
-const products = () => {
-  const { user } = useContext(AuthContext);
+const Products = () => {
+  // const { user } = useAuth();
+  // const [products, setProducts] = useState([]);
+
+  // useEffect(() => {
+    
+  // }, []);
+
+  const { user } = useAuth();
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("products.json")
-      .then((res) => res.json())
-      .then((data) => {
-        const storedProducts =
-          JSON.parse(localStorage.getItem("products")) || [];
-        setProducts([...data, ...storedProducts]);
-      })
-      .catch((err) => console.error(err));
+    const loadProducts = async () => {
+      try {
+        const res = await getProductApi();
+        setProducts(res?.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
   }, []);
+
+  if (loading) return <p>Loading products...</p>;
 
   const handleBuyRequest = (item) => {
     if (user.balance < Number(item.price)) {
@@ -138,4 +153,4 @@ const products = () => {
   );
 };
 
-export default products;
+export default Products;

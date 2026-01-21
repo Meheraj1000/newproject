@@ -123,8 +123,6 @@ function App() {
     rgba(124,58,237,0.25)
   `,
       });
-
-
     }
   }, [location.pathname]);
 

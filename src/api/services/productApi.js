@@ -6,3 +6,8 @@ export const createProductApi = async (payload) => {
     const res = await api.post("/products", payload);
     return res.data;
 };
+
+export const getProductApi = async () => {
+    const res = await api.get("/products");
+    return res.data;
+};
