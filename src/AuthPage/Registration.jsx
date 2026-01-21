@@ -1,66 +1,66 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { AuthContext } from "./AuthProvider";
+import { registerUserApi } from "../api/services/userApi";
 
 const Registration = () => {
-  const [phone, setPhone] = useState("");
+  const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
-  const [refCode, setRefCode] = useState("");
-  const [code, setCode] = useState("");
+  const [referedCode, setReferedCode] = useState("");
+  const [selfCode, setSelfCode] = useState("");
 
-  const { register } = useContext(AuthContext);
+
   const navigate = useNavigate();
 
   const generateCode = () => {
     const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
-    setCode(randomCode);
+    setSelfCode(randomCode);
   };
 
-  const handleRegister = () => {
-    if (!phone || !password || !refCode || !code) {
-      return Swal.fire({
-        icon: "error",
-        title: "সমস্যা!",
-        text: "সব ঘর পূরণ করুন।",
-      });
+  // ✅ onSubmit handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!selfCode) {
+      Swal.fire("Error", "অনুগ্রহ করে ক্যাপচা জেনারেট করুন", "error");
+      return;
     }
 
-    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const exists = storedUsers.find((u) => u.phone === phone);
-    if (exists) {
-      return Swal.fire({
-        icon: "error",
-        title: "সমস্যা!",
-        text: "এই মোবাইল নাম্বারটি আগে ব্যবহার হয়েছে!",
-      });
-    }
-
-    const newUser = {
-      phone,
+    const userData = {
+      mobile,
       password,
-      id: Date.now().toString().slice(-6),
-      balance: 0,
-      promoIncome: 0,
-      farmIncome: 0,
-      refCode,
+      referedCode,
+      selfCode,
     };
 
-    storedUsers.push(newUser);
-    localStorage.setItem("users", JSON.stringify(storedUsers));
+    try {
+      const res = await registerUserApi(userData);
 
-    Swal.fire({
-      icon: "success",
-      title: "রেজিস্ট্রেশন সফল!",
-      text: "আপনি সফলভাবে অ্যাকাউন্ট তৈরি করেছেন।",
-    }).then(() => {
-      navigate("/login");
-    });
+      if (res.success) {
+        Swal.fire({
+          icon: "success",
+          title: "রেজিস্ট্রেশন সফল!",
+          text: "আপনি সফলভাবে অ্যাকাউন্ট তৈরি করেছেন।",
+        }).then(() => {
+          navigate("/login");
+        });
+      }
+
+    } catch (error) {
+      console.error("Registration error:", error?.response, error?.response?.data?.errorSources[0]?.message);
+      Swal.fire(
+        "Error",
+        error?.response?.data?.errorSources[0]?.message || "রেজিস্ট্রেশন ব্যর্থ হয়েছে",
+        "error"
+      );
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-5">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 space-y-5">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 text-center">
           রেজিস্ট্রেশন করুন
         </h1>
@@ -68,22 +68,25 @@ const Registration = () => {
         {/* Inputs */}
         <input
           type="text"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          value={mobile}
+          required
+          onChange={(e) => setMobile(e.target.value)}
           placeholder="📱 মোবাইল নম্বর"
           className="w-full p-3 rounded border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
         <input
           type="password"
           value={password}
+          required
           onChange={(e) => setPassword(e.target.value)}
           placeholder="🔒 পাসওয়ার্ড"
           className="w-full p-3 rounded border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
         <input
           type="text"
-          value={refCode}
-          onChange={(e) => setRefCode(e.target.value)}
+          value={referedCode}
+          required
+          onChange={(e) => setReferedCode(e.target.value)}
           placeholder="👤 আমন্ত্রণ কোড"
           className="w-full p-3 rounded border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
@@ -92,12 +95,15 @@ const Registration = () => {
         <div className="flex gap-3">
           <input
             type="text"
-            value={code}
+            value={selfCode}
+            required
+            onChange={(e) => setSelfCode(e.target.value)}
             readOnly
             placeholder="🔐 ক্যাপচা"
             className="flex-1 p-3 rounded border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
           />
           <button
+            type="button"
             onClick={generateCode}
             className="bg-teal-500 hover:bg-teal-600 text-white px-4 rounded"
           >
@@ -107,7 +113,6 @@ const Registration = () => {
 
         {/* Buttons */}
         <button
-          onClick={handleRegister}
           className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 rounded font-semibold"
         >
           সাইন আপ
@@ -118,7 +123,7 @@ const Registration = () => {
         >
           লগইন এ ফিরে যান
         </Link>
-      </div>
+      </form>
     </div>
   );
 };

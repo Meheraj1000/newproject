@@ -6,7 +6,7 @@ export const loginApi = async ({ mobile, password }) => {
 
     const token = res.data?.data?.accessToken;
     if (token) setAccessToken(token);
-
+    console.log("Login response:", res);
     return res.data;
 };
 

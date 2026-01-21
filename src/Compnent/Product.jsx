@@ -8,7 +8,7 @@ const Products = () => {
   // const [products, setProducts] = useState([]);
 
   // useEffect(() => {
-    
+
   // }, []);
 
   const { user } = useAuth();
@@ -80,6 +80,7 @@ const Products = () => {
       }
     });
   };
+  console.log(products);
 
   return (
     <div className="p-3 md:p-5 bg-gray-50 dark:bg-gray-900 min-h-screen">
@@ -97,41 +98,39 @@ const Products = () => {
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 p-4 relative">
                 <div className="flex gap-3 items-start sm:items-center flex-1">
                   <img
-                    src={item.image}
-                    alt={item.name}
+                    src={item?.image}
+                    alt={item?.title}
                     className="w-20 h-16 sm:w-24 sm:h-20 object-cover rounded-md"
                   />
-
                   <div className="flex flex-col space-y-0.5 text-left text-sm">
                     <h3 className="font-semibold text-base text-gray-800 dark:text-gray-100">
-                      {item.name}
+                      {item?.title}
                     </h3>
 
-                    {item.years && (
-                      <p className="text-gray-600 dark:text-gray-300">
-                        {item.years}
-                      </p>
-                    )}
-
-                    <p className="text-indigo-600 dark:text-indigo-400 font-semibold">
-                      Tk {item.price}.00
+                    <p className="text-gray-600 dark:text-gray-300">
+                      {item?.investmentDayCycle}  দিন মেয়াদী
                     </p>
 
-                    {item.Day && (
-                      <p className="text-gray-600 dark:text-gray-300">
-                        {item.Day}
-                      </p>
-                    )}
+                    <p className="text-indigo-600 dark:text-indigo-400 font-semibold">
+                      Tk {item?.dailyProfit}
+                    </p>
+
+                    <p className="text-gray-600 dark:text-gray-300">
+                      দৈনিক আয়
+                    </p>
                   </div>
                 </div>
 
-                {item.count && (
-                  <div className="absolute top-2 right-2">
-                    <p className="text-purple-600 font-semibold text-xs">
-                      কোটা: {item.count}
-                    </p>
-                  </div>
-                )}
+                <div className="">
+                  <p className="text-start text-blue-700 font-bold">Tk {item?.totalProfit}</p>
+                  <p className="text-start">মোট আয়</p>
+                </div>
+
+                <div className="absolute top-2 right-2">
+                  <p className="text-purple-600 font-semibold text-xs">
+                    কোটা: {item?.maxInvestCountPerPerson}
+                  </p>
+                </div>
               </div>
 
               <div className="px-3 pb-3">
@@ -142,7 +141,7 @@ const Products = () => {
                   hover:from-purple-500 hover:to-indigo-600
                   transition duration-300"
                 >
-                  কিনুন: {item.price}
+                  কিনুন: {item?.price} টাকা
                 </button>
               </div>
             </div>

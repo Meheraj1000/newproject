@@ -25,7 +25,7 @@ const Login = () => {
       Swal.fire({
         icon: "error",
         title: "সমস্যা!",
-        text: res.error?.response?.data?.errorSources?.[0]?.message,
+        text: res.error?.response?.data?.errorSources?.[0]?.message || "লগইন করতে সমস্যা হয়েছে।",
       });
     }
 
