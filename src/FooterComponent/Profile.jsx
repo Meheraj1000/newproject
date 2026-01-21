@@ -62,11 +62,11 @@ const Profile = () => {
       {/* Header */}
       <div className="w-full bg-gradient-to-b from-indigo-100 to-white py-6 px-4 flex justify-between items-center">
         <div>
-          <p className="text-sm font-semibold">{user.phone}</p>
-          <p className="text-xs text-purple-500 mt-1">ID: {user.id}</p>
+          <p className="text-sm font-semibold">{user?.mobile}</p>
+          <p className="text-xs text-purple-500 mt-1">ID: {user?.selfCode}</p>
 
           <p className="text-indigo-600 font-bold mt-2 leading-tight text-lg">
-            Tk {user.balance || 0}
+            Tk {user?.balance || 0}
             <br />
             <span className="text-gray-600 text-xs font-normal">
               বর্তমান ব্যালেন্স

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { api, setAccessToken } from "../api/lib/api";
-import { loginApi } from "../api/services/authApi";
+import { api, getAccessToken, setAccessToken } from "../api/lib/api";
+import { loginApi, logoutApi } from "../api/services/authApi";
 
 const AuthContext = createContext(null);
 
@@ -15,12 +15,17 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     (async () => {
       try {
+        const token = getAccessToken();
+        if (!token) {
+          setUser(null);
+          return;
+        }
+
         const res = await api.get("/users/my-profile");
         const profile = res.data?.data ?? res.data?.user ?? res.data;
-        console.log("AuthProvider: Loaded user profile from useEffect", profile);
         setUser(profile);
+      // eslint-disable-next-line no-unused-vars
       } catch (err) {
-        console.error("AuthProvider: User load failed", err);
         setUser(null);
       } finally {
         setLoading(false); // ✅ auth check done
@@ -58,8 +63,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     setLoading(true);
     try {
-      // 🔜 future backend logout
-      // await api.post("/auth/logout");
+      await logoutApi();
     } finally {
       setAccessToken(null);
       setUser(null);
