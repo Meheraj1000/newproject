@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { FaChevronRight } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../AuthPage/AuthProvider";
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const steps = [
   {
@@ -42,12 +42,12 @@ const menuItems = [
 ];
 
 const Profile = () => {
-  const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  console.log(user); // todo : show into the UI
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
   };
 
   if (!user)
@@ -163,7 +163,7 @@ const Profile = () => {
       {/* Logout */}
       <button
         onClick={handleLogout}
-        className="w-full mt-6 text-purple-600 font-bold text-center"
+        className="btn btn-outline btn-info"
       >
         Logout
       </button>

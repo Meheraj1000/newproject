@@ -1,46 +1,40 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { AuthContext } from "./AuthProvider";
-import { loginApi } from "../api/services/authApi";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const { login } = useContext(AuthContext);
+  const [phone, setPhone] = useState("01401606882");
+  const [password, setPassword] = useState("12345678");
   const navigate = useNavigate();
+  const { login, loading } = useAuth();
+
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // page reload বন্ধ করবে
-    // setLoading(true);
-    // setError("");
+    e.preventDefault();
 
-    try {
-      const res = await loginApi({ mobile: phone, password });
-
-      if (res.success) {
-        Swal.fire({
-          icon: "success",
-          title: "সফলভাবে লগইন!",
-          text: "আপনি সফলভাবে লগইন করেছেন।",
-        }).then(() => {
-          navigate("/");
-        });
-      }
-
-    } catch (err) {
+    const res = await login({ mobile: phone, password });
+    if (res.success) {
+      Swal.fire({
+        icon: "success",
+        title: "সফলভাবে লগইন!",
+        text: "আপনি সফলভাবে লগইন করেছেন।",
+      })
+      navigate("/");
+    } else {
       Swal.fire({
         icon: "error",
         title: "সমস্যা!",
-        text: err?.response?.data?.errorSources[0]?.message,
+        text: res.error?.response?.data?.errorSources?.[0]?.message,
       });
     }
+
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       {/* Login Card */}
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 space-y-6 relative overflow-hidden">
+      <form className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 space-y-6 relative overflow-hidden">
 
         {/* Title */}
         <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white text-center">
@@ -71,7 +65,7 @@ const Login = () => {
 
         {/* Forget Password */}
         <Link
-          to="/forgot-password"
+          to="/"
           className="block text-right text-sm text-teal-700 dark:text-teal-400 hover:underline mb-4"
         >
           পাসওয়ার্ড মনে নেই?
@@ -80,9 +74,11 @@ const Login = () => {
         {/* Login Button */}
         <button
           onClick={handleLogin}
-          className="w-full bg-gradient-to-r from-teal-500 to-blue-500 hover:from-blue-500 hover:to-teal-500 text-white py-3 rounded-xl font-semibold shadow-md transition duration-300"
+          className="w-full bg-gradient-to-r from-teal-500 to-blue-500 hover:from-blue-500 hover:to-teal-500 text-white py-3 rounded-xl font-semibold shadow-md transition duration-300 disabled:opacity-50 "
+          disabled={loading}
         >
-          সাইন ইন
+          {loading ? <span className="loading loading-spinner loading-lg"></span>
+            : "সাইন ইন"}
         </button>
 
         {/* Divider */}
@@ -99,7 +95,7 @@ const Login = () => {
         >
           সাইন আপ
         </Link>
-      </div>
+      </form>
     </div>
   );
 };

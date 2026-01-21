@@ -1,5 +1,5 @@
 import { Route, Routes, useLocation } from "react-router-dom";
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import Swal from "sweetalert2";
 import "./App.css";
 
@@ -24,16 +24,17 @@ import Registration from "./AuthPage/Registration";
 import Login from "./AuthPage/Login";
 import Logout from "./AuthPage/Logout";
 import PrivateRoute from "./AuthPage/PrivateRoute";
-import { AuthContext } from "./AuthPage/AuthProvider";
 
 import Admin from "./Admin/Admin";
 import User from "./Admin/User";
 import ProductsAdd from "./Admin/ProductsAdd";
+import { useAuth } from "./context/AuthContext";
+import { userRole } from "./constants";
 
 function App() {
   const location = useLocation();
-  const { user } = useContext(AuthContext);
-  const isAdmin = user?.role === "admin";
+  const { user } = useAuth();
+  const isAdmin = user?.role === userRole.ADMIN;
 
   const authPages = ["/login", "/registration"];
   const isAuthPage = authPages.includes(location.pathname);
@@ -41,7 +42,7 @@ function App() {
   useEffect(() => {
     if (location.pathname === "/") {
       Swal.fire({
-  html: `
+        html: `
     <div style="
       text-align:center;
       padding:20px;
@@ -114,14 +115,14 @@ function App() {
       </a>
     </div>
   `,
-  confirmButtonText: "ঠিক আছে",
-  confirmButtonColor: "#7c3aed",
-  width: 440,
-  background: "#faf5ff",
-  backdrop: `
+        confirmButtonText: "ঠিক আছে",
+        confirmButtonColor: "#7c3aed",
+        width: 440,
+        background: "#faf5ff",
+        backdrop: `
     rgba(124,58,237,0.25)
   `,
-});
+      });
 
 
     }
