@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { FaShoppingCart } from "react-icons/fa";
+import { createProductApi } from "../api/services/productApi";
 
 const ProductsAdd = ({ balance = 0 }) => {
   const [products, setProducts] = useState([]);
@@ -16,29 +17,38 @@ const ProductsAdd = ({ balance = 0 }) => {
     count: "",
   });
 
-  useEffect(() => {
-    const storedProducts = JSON.parse(localStorage.getItem("products")) || [];
-    setProducts(storedProducts);
-  }, []);
+  // useEffect(() => {
+  //   const storedProducts = JSON.parse(localStorage.getItem("products")) || [];
+  //   setProducts(storedProducts);
+  // }, []);
 
-  const saveProducts = (updatedProducts) => {
-    setProducts(updatedProducts);
-    localStorage.setItem("products", JSON.stringify(updatedProducts));
-  };
+  // const saveProducts = (updatedProducts) => {
+  //   setProducts(updatedProducts);
+  //   localStorage.setItem("products", JSON.stringify(updatedProducts));
+  // };
 
   const handleProductChange = (e) => {
     const { name, value } = e.target;
     setNewProduct({ ...newProduct, [name]: value });
   };
 
-  const handleAddProduct = (e) => {
+  const handleAddProduct = async(e) => {
     e.preventDefault();
+
+    
+    try {
+      const res = await createProductApi(newProduct);
+      console.log("Response from API for create product:", res);
+    } catch (error) {
+      console.error("Error creating product:", error);
+    }
+
+
     if (!newProduct.name || !newProduct.price || !newProduct.image) {
       Swal.fire("ত্রুটি!", "নাম, দাম, এবং ছবি অবশ্যই দিতে হবে।", "error");
       return;
     }
-    const updatedProducts = [...products, newProduct];
-    saveProducts(updatedProducts);
+
     Swal.fire("সফল!", "নতুন পণ্য যোগ করা হয়েছে।", "success");
 
     setNewProduct({
@@ -53,6 +63,8 @@ const ProductsAdd = ({ balance = 0 }) => {
       count: "",
     });
   };
+
+  
 
   const handleBuyRequest = (item) => {
     if (balance < Number(item.price)) {
