@@ -6,15 +6,22 @@ import { createProductApi } from "../api/services/productApi";
 const ProductsAdd = ({ balance = 0 }) => {
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({
-    name: "",
-    image: "",
-    years: "",
-    price: "",
-    Day: "",
-    income: "",
-    total: "",
-    target: "",
-    count: "",
+    // name: "",
+    // image: "",
+    // years: "",
+    // price: "",
+    // Day: "",
+    // income: "",
+    // total: "",
+    // target: "",
+    // count: "",
+      title: "",
+      image: "",
+      dailyProfit: "",
+      maxInvestCount: "",
+      investmentDayCycle: "",
+      price: "",
+      totalProfit: ""
   });
 
   // useEffect(() => {
@@ -32,10 +39,10 @@ const ProductsAdd = ({ balance = 0 }) => {
     setNewProduct({ ...newProduct, [name]: value });
   };
 
-  const handleAddProduct = async(e) => {
+  const handleAddProduct = async (e) => {
     e.preventDefault();
 
-    
+
     try {
       const res = await createProductApi(newProduct);
       console.log("Response from API for create product:", res);
@@ -44,7 +51,7 @@ const ProductsAdd = ({ balance = 0 }) => {
     }
 
 
-    if (!newProduct.name || !newProduct.price || !newProduct.image) {
+    if (!newProduct?.title || !newProduct?.price || !newProduct?.image) {
       Swal.fire("ত্রুটি!", "নাম, দাম, এবং ছবি অবশ্যই দিতে হবে।", "error");
       return;
     }
@@ -52,22 +59,30 @@ const ProductsAdd = ({ balance = 0 }) => {
     Swal.fire("সফল!", "নতুন পণ্য যোগ করা হয়েছে।", "success");
 
     setNewProduct({
-      name: "",
+      // name: "",
+      // image: "",
+      // years: "",
+      // price: "",
+      // Day: "",
+      // income: "",
+      // total: "",
+      // target: "",
+      // count: "",
+      title: "",
       image: "",
-      years: "",
+      dailyProfit: "",
+      maxInvestCount: "",
+      investmentDayCycle: "",
       price: "",
-      Day: "",
-      income: "",
-      total: "",
-      target: "",
-      count: "",
+      totalProfit: ""
+
     });
   };
 
-  
+
 
   const handleBuyRequest = (item) => {
-    if (balance < Number(item.price)) {
+    if (balance < Number(item?.price)) {
       Swal.fire("ত্রুটি!", "অপর্যাপ্ত ব্যালেন্স!", "error");
       return;
     }
@@ -90,7 +105,7 @@ const ProductsAdd = ({ balance = 0 }) => {
             <div key={key} className="flex flex-col">
               <label className="text-gray-700 dark:text-gray-300 font-medium mb-1 capitalize">{key}</label>
               <input
-                type={["price", "target", "income", "total", "count", "years", "Day"].includes(key) ? "number" : "text"}
+                type={["price", "maxInvestCount", "income","investmentDayCycle","dailyProfit","totalProfit"].includes(key) ? "number" : "text"}
                 name={key}
                 placeholder={key}
                 value={newProduct[key]}
@@ -118,17 +133,17 @@ const ProductsAdd = ({ balance = 0 }) => {
             <div className="relative">
               <img
                 src={item.image}
-                alt={item.name}
+                alt={item.title}
                 className="w-full h-56 object-cover rounded-t-3xl"
               />
               <span className="absolute top-3 right-3 bg-yellow-400 text-gray-900 font-bold px-3 py-1 rounded-2xl shadow-md">
-                Tk {item.price}
+                Tk {item.dailyProfit}
               </span>
             </div>
             <div className="p-5 space-y-3">
-              <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">{item.name}</h3>
-              <p className="text-gray-600 dark:text-gray-300">Target: {item.target || "N/A"}</p>
-              <p className="text-gray-600 dark:text-gray-300">Income: {item.income || "N/A"}</p>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">{item.title}</h3>
+              <p className="text-gray-600 dark:text-gray-300">Target: {item.price || "N/A"}</p>
+              <p className="text-gray-600 dark:text-gray-300">Daily Profit: {item.dailyProfit || "N/A"}</p>
               <button
                 onClick={() => handleBuyRequest(item)}
                 className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-2xl font-semibold flex items-center justify-center gap-2 transition"
