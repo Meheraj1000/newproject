@@ -33,7 +33,7 @@ const Bonus = () => {
 
       {/* TASKS SECTION */}
       <div className="py-2 px-3">
-        {tasks.map((item, i) => (
+        {tasks?.map((item, i) => (
           <div
             key={i}
             className="flex items-center justify-between bg-white rounded-2xl shadow-lg p-4 m-2 border border-gray-200

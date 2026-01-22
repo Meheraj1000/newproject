@@ -74,7 +74,7 @@ const ProductsAdd = ({ balance = 0 }) => {
           নতুন পণ্য যোগ করুন
         </h2>
         <form onSubmit={handleAddProduct} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {Object.keys(newProduct).map((key) => (
+          {Object.keys(newProduct)?.map((key) => (
             <div key={key} className="flex flex-col">
               <label className="text-gray-700 dark:text-gray-300 font-medium mb-1 capitalize">{key}</label>
               <input
@@ -98,7 +98,7 @@ const ProductsAdd = ({ balance = 0 }) => {
 
       {/* ================= PRODUCTS GRID ================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {products.map((item, idx) => (
+        {products?.map((item, idx) => (
           <div
             key={idx}
             className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden transform hover:scale-105 transition cursor-pointer"

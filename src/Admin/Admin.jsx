@@ -103,11 +103,11 @@ const Admin = () => {
       {/* ================= PURCHASE ================= */}
       <section>
         <SectionTitle title="Purchase Requests" />
-        {purchaseRequests.length === 0 ? (
+        {purchaseRequests?.length === 0 ? (
           <p className="text-gray-500 dark:text-gray-400">কোনো অনুরোধ নেই।</p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {purchaseRequests.map((r, i) => (
+            {purchaseRequests?.map((r, i) => (
               <RequestCard key={i}>
                 <div>
                   <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">{r.name}</p>
@@ -137,11 +137,11 @@ const Admin = () => {
       {/* ================= DEPOSIT ================= */}
       <section>
         <SectionTitle title="Deposit Requests" />
-        {depositRequests.length === 0 ? (
+        {depositRequests?.length === 0 ? (
           <p className="text-gray-500 dark:text-gray-400">কোনো অনুরোধ নেই।</p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {depositRequests.map((d, i) => (
+            {depositRequests?.map((d, i) => (
               <RequestCard key={i}>
                 <div className="space-y-1">
                   <p className="text-gray-800 dark:text-gray-100 font-medium">Amount: Tk {d.amount}</p>
@@ -172,11 +172,11 @@ const Admin = () => {
       {/* ================= WITHDRAW ================= */}
       <section>
         <SectionTitle title="Withdraw Requests" />
-        {withdrawRequests.length === 0 ? (
+        {withdrawRequests?.length === 0 ? (
           <p className="text-gray-500 dark:text-gray-400">কোনো Withdraw অনুরোধ নেই।</p>
         ) : (
           <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {withdrawRequests.map((w, i) => (
+            {withdrawRequests?.map((w, i) => (
               <RequestCard key={w.id || i}>
                 <div className="space-y-1">
                   <p className="text-gray-800 dark:text-gray-100 font-medium">Phone: {w.userPhone}</p>

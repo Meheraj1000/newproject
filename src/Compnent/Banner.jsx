@@ -13,7 +13,7 @@ const Banner = () => {
   return (
     <section className="w-full p-4 bg-white shadow-md">
       <div className="carousel w-full rounded-md overflow-hidden">
-        {slides.map((src, index) => {
+        {slides?.map((src, index) => {
           const slideId = `slide${index + 1}`;
           return (
             <div
@@ -29,7 +29,7 @@ const Banner = () => {
 
               {/* Dot Indicators */}
               <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-3">
-                {slides.map((_, dotIndex) => (
+                {slides?.map((_, dotIndex) => (
                   <a
                     key={dotIndex}
                     href={`#slide${dotIndex + 1}`}

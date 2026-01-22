@@ -14,5 +14,6 @@ export const loginApi = async ({ mobile, password }) => {
 export const logoutApi = async () => {
     const res = await api.post("/auth/logout");
     setAccessToken(null);
+    console.log("Logout response:", res);
     return res.data;
 };

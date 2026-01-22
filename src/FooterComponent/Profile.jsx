@@ -114,7 +114,7 @@ const Profile = () => {
 
       {/* Steps */}
       <div className="px-4 mt-4 space-y-5">
-        {steps.map((step) => (
+        {steps?.map((step) => (
           <Link
             key={step.id}
             to="/bonus"
@@ -146,7 +146,7 @@ const Profile = () => {
 
       {/* Menu */}
       <div className="px-4 mt-8 space-y-3 pb-10">
-        {menuItems.map((item, index) => (
+        {menuItems?.map((item, index) => (
           <Link
             key={index}
             to="/"

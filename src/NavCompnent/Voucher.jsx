@@ -34,7 +34,7 @@ const Voucher = () => {
 
       {/* List Container */}
       <div className="mt-4 space-y-4">
-        {withdraws.map((item) => (
+        {withdraws?.map((item) => (
           <div
             key={item.id}
             className="bg-white p-4 rounded-xl shadow flex flex-col md:flex-row items-start gap-4 border border-gray-200"

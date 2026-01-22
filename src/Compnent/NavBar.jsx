@@ -12,7 +12,7 @@ const NavBar = () => {
   return (
     <nav className="bg-white shadow-md w-full">
       <ul className="flex flex-nowrap justify-between items-center gap-2 px-4 py-3 text-lg font-semibold">
-        {navItems.map((item, index) => (
+        {navItems?.map((item, index) => (
           <li key={index} className="flex-1 min-w-0 text-center">
             <Link to={item.to} className="flex flex-col items-center gap-1 py-2 rounded-md hover:bg-gray-100 transition-all duration-300">
               <img src={item.icon} alt={item.label} className="w-6 h-6 transition-transform duration-300 hover:scale-110" />

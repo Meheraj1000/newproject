@@ -17,7 +17,7 @@ const Footer = ({ isAdmin }) => {
   return (
     <nav className="bg-white shadow-md w-full">
       <ul className="flex justify-between items-center px-4 py-3 overflow-x-auto">
-        {navItems.map((item, index) => (
+        {navItems?.map((item, index) => (
           <li key={index} className="flex-1 text-center">
             <Link to={item.to}>
               <img src={item.icon} className="w-6 h-6 mx-auto" alt={item.label} />
@@ -27,7 +27,7 @@ const Footer = ({ isAdmin }) => {
         ))}
 
         {isAdmin &&
-          adminItems.map((item, index) => (
+          adminItems?.map((item, index) => (
             <li key={index} className="flex-1 text-center">
               <Link to={item.to}>
                 <img src={item.icon} className="w-6 h-6 mx-auto" alt={item.label} />

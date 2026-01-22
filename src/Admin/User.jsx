@@ -4,7 +4,7 @@ import { FaPlus, FaMinus, FaLock, FaUnlock, FaFileCsv } from "react-icons/fa";
 /* ================= CSV EXPORT ================= */
 const exportCSV = (users) => {
   const header = ["Phone", "Balance", "Blocked"];
-  const rows = users.map(u => [
+  const rows = users?.map(u => [
     u.phone,
     u.balance || 0,
     u.blocked ? "Yes" : "No"
@@ -47,7 +47,7 @@ const User = () => {
 
   /* ================= BLOCK / UNBLOCK ================= */
   const toggleBlock = (phone) => {
-    const updated = users.map(u =>
+    const updated = users?.map(u =>
       u.phone === phone ? { ...u, blocked: !u.blocked } : u
     );
     saveUsers(updated);
@@ -58,7 +58,7 @@ const User = () => {
   const updateBalance = (type) => {
     if (!amount || !selectedUser) return;
 
-    const updated = users.map(u => {
+    const updated = users?.map(u => {
       if (u.phone === selectedUser.phone) {
         const newBalance =
           type === "add"
@@ -135,10 +135,10 @@ const User = () => {
 
         {/* ================= USER LIST ================= */}
         <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-md h-fit overflow-y-auto max-h-[80vh]">
-          {filteredUsers.length === 0 ? (
+          {filteredUsers?.length === 0 ? (
             <p className="text-gray-500 dark:text-gray-400 text-center mt-4">No users found</p>
           ) : (
-            filteredUsers.map(u => (
+            filteredUsers?.map(u => (
               <div
                 key={u.phone}
                 onClick={() => setSelectedUser(u)}
@@ -203,11 +203,11 @@ const User = () => {
 
               {/* TRANSACTIONS */}
               <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">Transaction Timeline</h3>
-              {(selectedUser.transactions || []).length === 0 ? (
+              {(selectedUser.transactions || [])?.length === 0 ? (
                 <p className="text-gray-500 dark:text-gray-400 mb-4">No transactions</p>
               ) : (
                 <div className="space-y-2 mb-6">
-                  {selectedUser.transactions.map((t, i) => (
+                  {selectedUser.transactions?.map((t, i) => (
                     <div key={i} className="border p-4 rounded-lg bg-gray-50 dark:bg-gray-700 flex justify-between">
                       <p className="font-medium text-gray-700 dark:text-gray-200">{t.type}</p>
                       <p className="text-sm text-gray-500 dark:text-gray-300">Tk {t.amount} | {t.date}</p>
@@ -218,11 +218,11 @@ const User = () => {
 
               {/* DEPOSITS */}
               <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">Deposits</h3>
-              {userDeposits.length === 0 ? (
+              {userDeposits?.length === 0 ? (
                 <p className="text-gray-500 dark:text-gray-400 mb-4">No deposits</p>
               ) : (
                 <div className="space-y-2 mb-6">
-                  {userDeposits.map((d, i) => (
+                  {userDeposits?.map((d, i) => (
                     <div key={i} className="border p-4 rounded-lg bg-gray-50 dark:bg-gray-700 flex justify-between">
                       <p className="font-medium text-gray-700 dark:text-gray-200">Tk {d.amount}</p>
                       <p className="text-sm text-gray-500 dark:text-gray-300">{d.date}</p>
@@ -233,11 +233,11 @@ const User = () => {
 
               {/* REQUESTS */}
               <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">Requests</h3>
-              {userRequests.length === 0 ? (
+              {userRequests?.length === 0 ? (
                 <p className="text-gray-500 dark:text-gray-400 mb-4">No requests</p>
               ) : (
                 <div className="space-y-2">
-                  {userRequests.map((r, i) => (
+                  {userRequests?.map((r, i) => (
                     <div key={i} className="border p-4 rounded-lg bg-gray-50 dark:bg-gray-700 flex justify-between">
                       <p className="font-medium text-gray-700 dark:text-gray-200">{r.type}</p>
                       <p className="text-sm text-gray-500 dark:text-gray-300">Tk {r.amount} | {r.date}</p>

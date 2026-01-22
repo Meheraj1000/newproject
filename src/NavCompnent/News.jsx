@@ -31,12 +31,12 @@ const News = () => {
 
       {/* News Grid */}
       <div className="grid grid-cols-1 p-5 gap-5">
-        {news.length === 0 ? (
+        {news?.length === 0 ? (
           <p className="text-center text-gray-600 dark:text-gray-300">
             কোনো খবর নেই।
           </p>
         ) : (
-          news.map((item) => (
+          news?.map((item) => (
             <Link
               to={`/news/${item.id}`}
               key={item.id}

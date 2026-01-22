@@ -85,12 +85,12 @@ const Products = () => {
   return (
     <div className="p-3 md:p-5 bg-gray-50 dark:bg-gray-900 min-h-screen">
       <div className="grid grid-cols-1 gap-4">
-        {products.length === 0 ? (
+        {products?.length === 0 ? (
           <p className="text-center text-gray-500 dark:text-gray-300">
             কোনো পণ্য নেই।
           </p>
         ) : (
-          products.map((item, index) => (
+          products?.map((item, index) => (
             <div
               key={index}
               className="rounded-lg shadow bg-white dark:bg-gray-800 overflow-hidden border border-gray-200 dark:border-gray-700"

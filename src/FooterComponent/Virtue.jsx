@@ -26,7 +26,7 @@ const Virtue = () => {
 
   /* ================= DAILY INCOME ONCE PER DAY ================= */
   useEffect(() => {
-    if (!user || !savedVirtues.length) return;
+    if (!user || !savedVirtues?.length) return;
 
     const todayKey = `lastDailyIncome_${user.phone}`;
     const lastDate = localStorage.getItem(todayKey);
@@ -68,10 +68,10 @@ const Virtue = () => {
       </div>
 
       <div className="p-4">
-        {savedVirtues.length === 0 ? (
+        {savedVirtues?.length === 0 ? (
           <p className="text-gray-500 text-center">আপনি এখনও কিছু কেনেননি।</p>
         ) : (
-          savedVirtues.map((item, index) => {
+          savedVirtues?.map((item, index) => {
             const dailyIncome = Number((item.price || 0).toString().replace(/,/g, ""));
             const productPrice = Number((item.target || 0).toString().replace(/,/g, ""));
             const totalDays = item.totalDays || 365;
@@ -134,7 +134,7 @@ const Virtue = () => {
           })
         )}
 
-        {savedVirtues.length > 0 && <p className="text-center text-gray-400 mt-5">No More Data</p>}
+        {savedVirtues?.length > 0 && <p className="text-center text-gray-400 mt-5">No More Data</p>}
       </div>
     </div>
   );
