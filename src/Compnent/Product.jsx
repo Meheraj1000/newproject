@@ -33,7 +33,7 @@ const Products = () => {
   if (loading) return <p>Loading products...</p>;
 
   const handleBuyRequest = (item) => {
-    if (user.balance < Number(item.price)) {
+    if (user?.balance < Number(item?.price)) {
       Swal.fire({
         icon: "error",
         title: "অপর্যাপ্ত ব্যালেন্স!",

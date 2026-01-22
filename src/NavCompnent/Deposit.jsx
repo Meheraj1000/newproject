@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { paymentType } from "../constants";
+
 
 const Deposit = () => {
+  const {user} = useAuth();
   const [amount, setAmount] = useState("");
   const [payType, setPayType] = useState("");
+  
 
   const navigate = useNavigate();
 
@@ -37,7 +42,7 @@ const Deposit = () => {
       <div className="max-w-5xl mx-auto mt-6 p-4">
         <div className="bg-gradient-to-r from-indigo-600 to-purple-500 text-white p-6 rounded-xl">
           <p className="text-lg">বর্তমান ব্যালেন্স</p>
-          <h2 className="text-4xl font-bold mt-1">{amount || 0}</h2>
+          <h2 className="text-4xl font-bold mt-1">{user?.balance || 0}</h2>
         </div>
 
         <input
@@ -67,7 +72,7 @@ const Deposit = () => {
         <div className="border rounded-lg p-4 mt-5 bg-white">
           <p className="font-semibold mb-3">Pay Type:</p>
           <div className="grid grid-cols-2 gap-4">
-            {["Bkash", "Nagad"]?.map((method) => (
+            {[paymentType.BKASH, paymentType.NAGAD]?.map((method) => (
               <div
                 key={method}
                 onClick={() => setPayType(method)}

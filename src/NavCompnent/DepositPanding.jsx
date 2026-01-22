@@ -1,18 +1,30 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { AuthContext } from "../AuthPage/AuthProvider";
 import Swal from "sweetalert2";   
+import { useAuth } from "../context/AuthContext";
+import { depositStatus, paymentType } from "../constants";
+
 
 const DepositPanding = () => {
   const location = useLocation();
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
-  const amount = location.state?.amount || 500;
+  const amount = location.state?.amount || 0;
+  const payType = location.state?.payType || paymentType.BKASH;
 
-  const [method, setMethod] = useState("bkash"); // Default bKash
+  const [method, setMethod] = useState(payType); 
   const [trxId, setTrxId] = useState("");
 
   const walletNumber = "01920933383";
+
+  const depositData = {
+    userId: user?._id,
+    amount,
+    payType,
+    trxId,
+    status: depositStatus.PENDING
+  }
+  console.log(depositData);
 
   const handleSubmit = () => {
     if (!user) {
@@ -20,32 +32,25 @@ const DepositPanding = () => {
       return;
     }
 
-    if (method !== "cash" && !trxId.trim()) {
-      Swal.fire("Error", "TrxID প্রদান করুন!", "error");
-      return;
-    }
+    // const newDeposit = {
+    //   userPhone: user.phone,
+    //   amount: Number(amount),
+    //   trxId: method === "cash" ? "N/A" : trxId.trim(),
+    //   method,
+    //   status: "pending",
+    //   createdAt: new Date().toLocaleString(),
+    // };
 
-    const newDeposit = {
-      userPhone: user.phone,
-      amount: Number(amount),
-      trxId: method === "cash" ? "N/A" : trxId.trim(),
-      method,
-      status: "pending",
-      createdAt: new Date().toLocaleString(),
-    };
-
-    const allDeposits = JSON.parse(localStorage.getItem("allDeposits")) || [];
-    allDeposits.push(newDeposit);
-    localStorage.setItem("allDeposits", JSON.stringify(allDeposits));
+    // const allDeposits = JSON.parse(localStorage.getItem("allDeposits")) || [];
+    // allDeposits.push(newDeposit);
+    // localStorage.setItem("allDeposits", JSON.stringify(allDeposits));
 
     Swal.fire("Success", "জমা অনুরোধ পাঠানো হয়েছে", "success");
-    setTrxId("");
   };
 
   const getMethodLabel = (m) => {
-    if (m === "bkash") return "bKash";
-    if (m === "nagad") return "Nagad";
-    return "Cash";
+    if (m === paymentType.BKASH) return paymentType.BKASH;
+    if (m === paymentType.NAGAD) return paymentType.NAGAD;
   };
 
   return (
@@ -54,23 +59,23 @@ const DepositPanding = () => {
       {/* TOP */}
       <div className="bg-gradient-to-r from-indigo-600 to-purple-500 text-center text-white py-5 rounded-b-3xl">
         <p className="text-sm">অর্ডার আইডি: {Date.now()}</p>
-        <h1 className="text-4xl font-bold mt-2">৳ {amount}.00</h1>
+        <h1 className="text-4xl font-bold mt-2">৳ {amount}</h1>
       </div>
 
       {/* METHOD BUTTONS */}
       <div className="px-4 mt-6">
         <p className="font-bold text-gray-700 mb-1">পেমেন্ট চ্যানেল</p>
         <div className="flex gap-4 mb-3">
-          {["bkash", "nagad"]?.map((m) => (
+          {[paymentType.BKASH, paymentType.NAGAD]?.map((m) => (
             <button
               key={m}
               onClick={() => setMethod(m)}
               className={`px-4 py-2 border rounded-full font-semibold transition-colors duration-200
                 ${
                   method === m
-                    ? m === "bkash"
+                    ? m === paymentType.BKASH
                       ? "bg-indigo-50 border-indigo-600 text-indigo-600"
-                      : m === "nagad"
+                      : m === paymentType.NAGAD
                       ? "bg-purple-50 border-purple-500 text-purple-500"
                       : "bg-gray-100 border-gray-400 text-gray-700 font-bold"
                     : "bg-white border-gray-300 text-gray-600"
@@ -124,6 +129,7 @@ const DepositPanding = () => {
           />
         </div>
       )}
+      
 
       {/* SUBMIT */}
       <div className="px-4 mt-3">
