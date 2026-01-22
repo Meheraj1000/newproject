@@ -32,18 +32,6 @@ const DepositPanding = () => {
       return;
     }
 
-    // const newDeposit = {
-    //   userPhone: user.phone,
-    //   amount: Number(amount),
-    //   trxId: method === "cash" ? "N/A" : trxId.trim(),
-    //   method,
-    //   status: "pending",
-    //   createdAt: new Date().toLocaleString(),
-    // };
-
-    // const allDeposits = JSON.parse(localStorage.getItem("allDeposits")) || [];
-    // allDeposits.push(newDeposit);
-    // localStorage.setItem("allDeposits", JSON.stringify(allDeposits));
 
     Swal.fire("Success", "জমা অনুরোধ পাঠানো হয়েছে", "success");
   };
