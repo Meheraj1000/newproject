@@ -18,3 +18,9 @@ export const depositStatus = {
   APPROVED: "APPROVED",
   REJECTED: "REJECTED",
 };
+
+export const investmentStatus = {
+  PENDING: "PENDING",
+  ACCEPTED: "ACCEPTED",
+  REJECTED: "REJECTED",
+};

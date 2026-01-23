@@ -30,10 +30,10 @@ const ProductsAdd = ({ balance = 0 }) => {
         ...newProduct,
         price: Number(newProduct.price),
         dailyProfit: Number(newProduct.dailyProfit),
-        maxInvestCount: Number(newProduct.maxInvestCount),
+        maxInvestCountPerPerson: Number(newProduct.maxInvestCount),
         investmentDayCycle: Number(newProduct.investmentDayCycle),
       }
-
+      
       await createProductApi(addPData);
       setProducts([...products, addPData])
       Swal.fire("সফল!", "নতুন পণ্য যোগ করা হয়েছে।", "success");

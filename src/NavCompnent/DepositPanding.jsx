@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import Swal from "sweetalert2";   
+import Swal from "sweetalert2";
 import { useAuth } from "../context/AuthContext";
-import { depositStatus, paymentType } from "../constants";
+import { paymentType } from "../constants";
+import { createDepositeApi } from "../api/services/depositeApi";
 
 
 const DepositPanding = () => {
@@ -12,32 +13,35 @@ const DepositPanding = () => {
   const amount = location.state?.amount || 0;
   const payType = location.state?.payType || paymentType.BKASH;
 
-  const [method, setMethod] = useState(payType); 
+  const [method, setMethod] = useState(payType);
   const [trxId, setTrxId] = useState("");
 
   const walletNumber = "01920933383";
 
   const depositData = {
-    userId: user?._id,
-    amount,
+    amount: Number(amount),
     payType,
-    trxId,
-    status: depositStatus.PENDING
+    trxID: trxId
   }
-  console.log(depositData);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!user) {
       Swal.fire("Error", "অনুগ্রহ করে আগে লগইন করুন", "error");
       return;
     }
 
-
-    Swal.fire("Success", "জমা অনুরোধ পাঠানো হয়েছে", "success");
+    try {
+      const res = await createDepositeApi(depositData);
+      if (res.success) {
+        Swal.fire("Success", "জমা অনুরোধ পাঠানো হয়েছে", "success");
+      }
+    } catch (error) {
+      Swal.fire("Error", error.response?.data?.errorSources[0]?.message || "জমা অনুরোধ পাঠানো হয়নি", "error");
+    }
   };
 
   const getMethodLabel = (m) => {
-    if (m === paymentType.BKASH) return paymentType.BKASH;
+    if (m === paymentType.BKASH) return paymentType.BKASH; // bug without fix
     if (m === paymentType.NAGAD) return paymentType.NAGAD;
   };
 
@@ -59,14 +63,13 @@ const DepositPanding = () => {
               key={m}
               onClick={() => setMethod(m)}
               className={`px-4 py-2 border rounded-full font-semibold transition-colors duration-200
-                ${
-                  method === m
-                    ? m === paymentType.BKASH
-                      ? "bg-indigo-50 border-indigo-600 text-indigo-600"
-                      : m === paymentType.NAGAD
+                ${method === m
+                  ? m === paymentType.BKASH
+                    ? "bg-indigo-50 border-indigo-600 text-indigo-600"
+                    : m === paymentType.NAGAD
                       ? "bg-purple-50 border-purple-500 text-purple-500"
                       : "bg-gray-100 border-gray-400 text-gray-700 font-bold"
-                    : "bg-white border-gray-300 text-gray-600"
+                  : "bg-white border-gray-300 text-gray-600"
                 }`}
             >
               {getMethodLabel(m)}
@@ -110,6 +113,7 @@ const DepositPanding = () => {
 
           <input
             type="text"
+            required
             placeholder="TrxID অবশ্যই দিতে হবে"
             className="w-full border p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-400"
             value={trxId}
@@ -117,7 +121,7 @@ const DepositPanding = () => {
           />
         </div>
       )}
-      
+
 
       {/* SUBMIT */}
       <div className="px-4 mt-3">

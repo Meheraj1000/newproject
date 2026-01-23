@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../AuthPage/AuthProvider";
+import { useAuth } from "../Context/AuthContext";
+import { getMyInvestmentsApi } from "../api/services/investmentApi";
+import { getTotalHoursFromInvestDay } from "../utils/formatedDate";
 
 const Virtue = () => {
-  const { user, setUser } = useContext(AuthContext);
+  const { user } = useAuth();
   const [now, setNow] = useState(new Date());
   const [savedVirtues, setSavedVirtues] = useState([]);
 
@@ -15,14 +17,19 @@ const Virtue = () => {
 
   /* ================= FETCH VIRTUES ================= */
   useEffect(() => {
-    if (user?.virtues?.length > 0) {
-      setSavedVirtues(user.virtues);
-      localStorage.setItem("virtuesData", JSON.stringify(user.virtues));
-    } else {
-      const stored = localStorage.getItem("virtuesData");
-      if (stored) setSavedVirtues(JSON.parse(stored));
+
+    const fetchMyInvestments = async () => {
+      try {
+        const res = await getMyInvestmentsApi();
+        setSavedVirtues(res?.data || []);
+      } catch (error) {
+        console.error("Error fetching investments:", error);
+      }
     }
-  }, [user?.virtues]);
+
+    fetchMyInvestments();
+  }, []);
+  console.log("Saved virtues: ", savedVirtues);
 
   /* ================= DAILY INCOME ONCE PER DAY ================= */
   useEffect(() => {
@@ -43,15 +50,15 @@ const Virtue = () => {
     });
 
     if (totalDailyIncome > 0) {
-      setUser((prev) => ({
-        ...prev,
-        balance: (Number(prev.balance) || 0) + totalDailyIncome,
-      }));
+      // setUser((prev) => ({
+      //   ...prev,
+      //   balance: (Number(prev.balance) || 0) + totalDailyIncome,
+      // }));
 
       // আজকের তারিখ localStorage-এ রাখলাম
-      localStorage.setItem(todayKey, todayStr);
+      // localStorage.setItem(todayKey, todayStr);
     }
-  }, [now, savedVirtues, user, setUser]);
+  }, [now, savedVirtues, user]);
 
   return (
     <div className="w-full bg-gray-100 min-h-screen">
@@ -72,20 +79,16 @@ const Virtue = () => {
           <p className="text-gray-500 text-center">আপনি এখনও কিছু কেনেননি।</p>
         ) : (
           savedVirtues?.map((item, index) => {
-            const dailyIncome = Number((item.price || 0).toString().replace(/,/g, ""));
-            const productPrice = Number((item.target || 0).toString().replace(/,/g, ""));
-            const totalDays = item.totalDays || 365;
+            const dailyIncome = Number((item?.productId?.dailyProfit || 0));
+            const productPrice = Number((item.amount || 0));
+            const totalDays = item.productId?.investmentDayCycle || 0;
 
             const purchaseDate = item.date ? new Date(item.date) : new Date();
             const validPurchaseDate = isNaN(purchaseDate.getTime()) ? new Date() : purchaseDate;
 
-            const start = new Date(validPurchaseDate.getFullYear(), validPurchaseDate.getMonth(), validPurchaseDate.getDate());
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const diffDays = Math.min(Math.max(Math.floor((today - start) / (1000 * 60 * 60 * 24)), 0), totalDays);
+            const getHours = getTotalHoursFromInvestDay(item?.createdAt);
+            const getDayFromInvest = getTotalHoursFromInvestDay(item?.createdAt)
 
-            const totalEarned = dailyIncome * diffDays;
-            const diffHours = Math.floor((now - validPurchaseDate) / (1000 * 60 * 60));
-            const hoursWorked = Math.max(diffHours, 0);
 
             const purchaseDateString = validPurchaseDate.toLocaleDateString("en-GB");
             const purchaseTimeString = validPurchaseDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -98,15 +101,15 @@ const Virtue = () => {
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-3 text-center bg-white py-5 mb-3">
-                  <div>
+                <div className="grid grid-cols-3 text-center bg-white py-1 mt-3">
+                  <div >
                     <h3 className="text-indigo-600 font-bold text-xl">Tk{dailyIncome.toFixed(2)}</h3>
                     <p className="text-gray-600 text-sm">দৈনিক আয়</p>
                   </div>
 
                   <div>
-                    <h3 className="text-green-600 font-bold text-xl">Tk{item.income}</h3>
-                    <p className="text-gray-600 text-sm">মোট আয়</p>
+                    <h3 className="text-green-600 font-bold text-xl">Tk{item?.productId?.totalProfit}</h3>
+                    <p className="text-gray-600 text-sm">মোট আয় </p>
                   </div>
 
                   <div>
@@ -117,17 +120,17 @@ const Virtue = () => {
 
                 {/* Product Info */}
                 <div className="flex items-center gap-3 mb-3">
-                  <img src={item.image || ""} alt={item.name || "No Name"} className="w-16 h-16 object-cover rounded-md" />
-                  <div>
-                    <h3 className="text-md font-bold text-black">{item.name || "Unnamed"}</h3>
-                    <p className="text-xs text-gray-500">Hours Worked: {hoursWorked}</p>
+                  <img src={item?.productId?.image || ""} alt={item?.productId?.title} className="w-16 h-16 object-cover rounded-md" />
+                  <div className="text-start">
+                    <h3 className="text-md font-bold text-black">{item?.productId?.title || "Unnamed"}</h3>
+                    <p className="text-xs text-gray-500 font-bold">Hours Worked: {getHours}</p>
                   </div>
                 </div>
 
                 {/* Progress Bar */}
                 <div className="flex justify-between p-4 bg-gradient-to-r from-indigo-600 to-purple-500 text-sm mt-2 rounded-md">
-                  <span className="text-white">সময়কাল: {diffDays} / {totalDays} দিন</span>
-                  <span className="text-white font-bold">মোট অর্জন : Tk{item.income}</span>
+                  <span className="text-white">সময়কাল: {getDayFromInvest} / {totalDays} দিন</span>
+                  <span className="text-white ">মোট অর্জন : Tk {item?.productId?.dailyProfit * Number(getDayFromInvest)}</span>
                 </div>
               </div>
             );
@@ -139,5 +142,7 @@ const Virtue = () => {
     </div>
   );
 };
+
+
 
 export default Virtue;

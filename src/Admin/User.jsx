@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus, FaMinus, FaLock, FaUnlock, FaFileCsv } from "react-icons/fa";
+import { getAllUsersApi } from "../api/services/userApi";
+import { userStatus } from "../constants";
 
 /* ================= CSV EXPORT ================= */
 const exportCSV = (users) => {
@@ -34,9 +36,18 @@ const User = () => {
 
   /* ================= LOAD DATA ================= */
   useEffect(() => {
-    setUsers(JSON.parse(localStorage.getItem("users")) || []);
-    setRequests(JSON.parse(localStorage.getItem("allRequests")) || []);
-    setDeposits(JSON.parse(localStorage.getItem("allDeposits")) || []);
+    const getAllUsers = async () => {
+      try {
+        const res = await getAllUsersApi();
+        console.log(res?.data);
+        setUsers(res?.data);
+      } catch (error) {
+        console.log("error", error)
+      }
+    }
+
+    getAllUsers();
+
   }, []);
 
   /* ================= SAVE USERS ================= */
@@ -135,23 +146,23 @@ const User = () => {
 
         {/* ================= USER LIST ================= */}
         <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-md h-fit overflow-y-auto max-h-[80vh]">
-          {filteredUsers?.length === 0 ? (
+          {users?.length === 0 ? (
             <p className="text-gray-500 dark:text-gray-400 text-center mt-4">No users found</p>
           ) : (
-            filteredUsers?.map(u => (
+            users?.map(u => (
               <div
-                key={u.phone}
+                key={u?._id}
                 onClick={() => setSelectedUser(u)}
                 className={`p-4 mb-3 rounded-lg cursor-pointer border flex justify-between items-center
-                  ${u.blocked ? "bg-red-50 dark:bg-red-700/20" : "hover:bg-gray-100 dark:hover:bg-gray-700 transition"}`}
+                  ${u.status === userStatus.BLOCKED ? "bg-red-50 dark:bg-red-700/20" : "hover:bg-gray-100 dark:hover:bg-gray-700 transition"}`}
               >
                 <div>
-                  <p className="font-semibold text-gray-800 dark:text-gray-100">{u.phone}</p>
+                  <p className="font-semibold text-gray-800 dark:text-gray-100">{u.mobile}</p>
                   <p className="text-sm text-gray-500 dark:text-gray-300">
-                    Tk {u.balance || 0} | {u.blocked ? "Blocked" : "Active"}
+                    Tk {u.balance || 0} | {u.status === userStatus.BLOCKED ? "Blocked" : "Active"}
                   </p>
                 </div>
-                {u.blocked && <FaLock className="text-red-500" />}
+                {u.status === userStatus.BLOCKED && <FaLock className="text-red-500" />}
               </div>
             ))
           )}

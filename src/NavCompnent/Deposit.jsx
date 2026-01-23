@@ -6,7 +6,7 @@ import { paymentType } from "../constants";
 
 const Deposit = () => {
   const {user} = useAuth();
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(0);
   const [payType, setPayType] = useState("");
   
 

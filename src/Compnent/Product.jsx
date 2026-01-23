@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { useAuth } from "../context/AuthContext";
 import { getProductApi } from "../api/services/productApi";
+import { createInvestmentsApi } from "../api/services/investmentApi";
+import { useAuth } from "../Context/AuthContext";
 
 const Products = () => {
-  // const { user } = useAuth();
-  // const [products, setProducts] = useState([]);
-
-  // useEffect(() => {
-
-  // }, []);
-
   const { user } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -51,36 +45,40 @@ const Products = () => {
       return;
     }
 
+    console.log(item);
+
     Swal.fire({
       text: "আপনি কি নিশ্চিত এই পণ্যটি কিনতে চান?",
       showCancelButton: true,
       cancelButtonText: "না",
       confirmButtonText: "হ্যাঁ",
       confirmButtonColor: "#6366f1",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        const newRequest = {
-          ...item,
-          status: "pending",
-          date: new Date().toLocaleString(),
-          requestId: Math.random().toString(36).substr(2, 9),
-          userPhone: user.phone,
+        const requestData = {
+          amount: item?.price,
+          productId: item?._id
         };
 
-        const allRequests =
-          JSON.parse(localStorage.getItem("allRequests")) || [];
-        allRequests.push(newRequest);
-        localStorage.setItem("allRequests", JSON.stringify(allRequests));
-
-        Swal.fire({
-          icon: "info",
-          title: "অনুরোধ জমা হয়েছে!",
-          text: "অ্যাডমিন আপনার অনুরোধ অনুমোদন করবেন।",
-        });
+        try {
+          await createInvestmentsApi(requestData);
+          Swal.fire({
+            icon: "info",
+            title: "অনুরোধ জমা হয়েছে!",
+            text: "অ্যাডমিন আপনার অনুরোধ অনুমোদন করবেন।",
+          });
+        } catch (error) {
+          console.error("Error creating investment request:", error);
+          Swal.fire({
+            icon: "error",
+            title: "ত্রুটি!",
+            text: error.response?.data?.errorSources[0]?.message || "অনুরোধ প্রক্রিয়াকরণে সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।",
+          });
+        }
       }
     });
   };
-  console.log(products);
+  // console.log(products);
 
   return (
     <div className="p-3 md:p-5 bg-gray-50 dark:bg-gray-900 min-h-screen">

@@ -1,68 +1,90 @@
 import React, { useEffect, useState, useContext } from "react";
 import Swal from "sweetalert2";
 import { AuthContext } from "../AuthPage/AuthProvider";
+import { getDepositeDepentOnStatusApi, updateDepositeStatusApi } from "../api/services/depositeApi";
+import { depositStatus, investmentStatus } from "../constants";
+import { getPendingInvestmentsAdminApi, updateInvestmentStatusAdminApi } from "../api/services/investmentApi";
 
 const Admin = () => {
   const [purchaseRequests, setPurchaseRequests] = useState([]);
   const [depositRequests, setDepositRequests] = useState([]);
   const [withdrawRequests, setWithdrawRequests] = useState([]);
+  const [loadingDeposits, setLoadingDeposits] = useState(false);
 
   const { updateAnyUserByAdmin } = useContext(AuthContext);
 
   useEffect(() => {
-    const allRequests = JSON.parse(localStorage.getItem("allRequests")) || [];
-    const allDeposits = JSON.parse(localStorage.getItem("allDeposits")) || [];
-    const allWithdraws = JSON.parse(localStorage.getItem("allWithdraws")) || [];
+    const loadDepositRequests = async () => {
+      try {
+        setLoadingDeposits(true);
 
-    setPurchaseRequests(allRequests);
-    setDepositRequests(allDeposits);
-    setWithdrawRequests(allWithdraws);
+        // 🔹 1) Pending deposits (ADMIN)
+        const depositRes = await getDepositeDepentOnStatusApi(
+          depositStatus.PENDING
+        );
+        const deposits = depositRes?.data ?? depositRes ?? [];
+        setDepositRequests(deposits);
+
+
+        // 🔹 2) Pending investments (ADMIN)
+        const investmentRes = await getPendingInvestmentsAdminApi();
+        const investments = investmentRes?.data ?? investmentRes ?? [];
+        setPurchaseRequests(investments);
+
+      } catch (error) {
+        console.error("AdminRequests: loadDepositRequests error:", error);
+        setDepositRequests([]);
+        setPurchaseRequests([]);
+      } finally {
+        setLoadingDeposits(false);
+      }
+    };
+
+    loadDepositRequests();
+
   }, []);
 
-  const handlePurchase = (index, approve) => {
-    const request = purchaseRequests[index];
-    if (!request) return;
+  const handlePurchase = async (index, approve) => {
+    const purchase = purchaseRequests[index];
+    console.log(purchase, approve);
 
+    try {
+      const res = await updateInvestmentStatusAdminApi(purchase._id, approve);
+      const updated = res?.data ?? res;
+      console.log("Updated deposit:", updated);
+
+      Swal.fire("অনুমোদিত", "পণ্য অনুমোদন হয়েছে", "success");
+    } catch (error) {
+      console.error("Error updating deposit status:", error);
+      Swal.fire("প্রত্যাখ্যান", "Problem hoise", "info");
+    }
+    // const updatedDeposits = [...depositRequests];
+    // updatedDeposits.splice(index, 1);
+    // setDepositRequests(updatedDeposits);
     const updatedRequests = [...purchaseRequests];
     updatedRequests.splice(index, 1);
     setPurchaseRequests(updatedRequests);
-    localStorage.setItem("allRequests", JSON.stringify(updatedRequests));
 
-    if (approve) {
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      const reqUser = users.find((u) => u.phone === request.userPhone);
-      if (reqUser) {
-        reqUser.balance = Number(reqUser.balance || 0) - Number(request.price);
-        reqUser.virtues = [...(reqUser.virtues || []), request];
-        updateAnyUserByAdmin(reqUser);
-      }
-      Swal.fire("অনুমোদিত", "পণ্য অনুমোদন হয়েছে", "success");
-    } else {
-      Swal.fire("প্রত্যাখ্যান", "অনুরোধ প্রত্যাখ্যান করা হয়েছে", "info");
-    }
   };
 
-  const handleDeposit = (index, approve) => {
+  const handleDeposit = async (index, approve) => {
     const deposit = depositRequests[index];
-    if (!deposit) return;
+    console.log(deposit, approve);
 
+    try {
+      const res = await updateDepositeStatusApi(deposit._id, approve);
+      const updated = res?.data ?? res;
+      console.log("Updated deposit:", updated);
+      Swal.fire("সফল", "ব্যালেন্স যোগ হয়েছে" | "Deposit request প্রত্যাখ্যান করা হয়েছে", "success");
+    } catch (error) {
+      console.error("Error updating deposit status:", error);
+      Swal.fire("প্রত্যাখ্যান", "Problem hoise", "info");
+    }
     const updatedDeposits = [...depositRequests];
     updatedDeposits.splice(index, 1);
     setDepositRequests(updatedDeposits);
-    localStorage.setItem("allDeposits", JSON.stringify(updatedDeposits));
-
-    if (approve) {
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      const depUser = users.find((u) => u.phone === deposit.userPhone);
-      if (depUser) {
-        depUser.balance = Number(depUser.balance || 0) + Number(deposit.amount);
-        updateAnyUserByAdmin(depUser);
-      }
-      Swal.fire("সফল", "ব্যালেন্স যোগ হয়েছে", "success");
-    } else {
-      Swal.fire("প্রত্যাখ্যান", "Deposit request প্রত্যাখ্যান করা হয়েছে", "info");
-    }
   };
+
 
   const handleWithdraw = (index, approve) => {
     const withdraw = withdrawRequests[index];
@@ -110,19 +132,19 @@ const Admin = () => {
             {purchaseRequests?.map((r, i) => (
               <RequestCard key={i}>
                 <div>
-                  <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">{r.name}</p>
-                  <p className="text-gray-600 dark:text-gray-300 mt-1">Price: Tk {r.price}</p>
-                  <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">By: {r.userPhone}</p>
+                  <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">{r?.productId?.title}</p>
+                  <p className="text-gray-600 dark:text-gray-300 mt-1">Price: Tk {r?.amount}</p>
+                  <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">By: {r?.userId?.mobile}</p>
                 </div>
                 <div className="mt-4 flex gap-2 flex-wrap">
                   <button
-                    onClick={() => handlePurchase(i, true)}
+                    onClick={() => handlePurchase(i, investmentStatus.ACCEPTED)}
                     className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg font-medium transition"
                   >
                     Approve
                   </button>
                   <button
-                    onClick={() => handlePurchase(i, false)}
+                    onClick={() => handlePurchase(i, investmentStatus.REJECTED)}
                     className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-medium transition"
                   >
                     Reject
@@ -145,19 +167,19 @@ const Admin = () => {
               <RequestCard key={i}>
                 <div className="space-y-1">
                   <p className="text-gray-800 dark:text-gray-100 font-medium">Amount: Tk {d.amount}</p>
-                  <p className="text-gray-500 dark:text-gray-400">By: {d.userPhone}</p>
-                  <p className="text-gray-500 dark:text-gray-400">TrxID: {d.trxId}</p>
-                  <p className="text-gray-500 dark:text-gray-400">Method: {d.method}</p>
+                  <p className="text-gray-500 dark:text-gray-400">By: {d.userId?.mobile}</p>
+                  <p className="text-gray-500 dark:text-gray-400">TrxID: {d.trxID}</p>
+                  <p className="text-gray-500 dark:text-gray-400">Method: {d.payType}</p>
                 </div>
                 <div className="mt-4 flex gap-2 flex-wrap">
                   <button
-                    onClick={() => handleDeposit(i, true)}
+                    onClick={() => handleDeposit(i, depositStatus.APPROVED)}
                     className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg font-medium transition"
                   >
                     Approve
                   </button>
                   <button
-                    onClick={() => handleDeposit(i, false)}
+                    onClick={() => handleDeposit(i, depositStatus.REJECTED)}
                     className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-medium transition"
                   >
                     Reject

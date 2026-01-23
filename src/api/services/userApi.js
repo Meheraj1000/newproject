@@ -11,3 +11,10 @@ export const myProfileApi = async () => {
     const res = await api.get("/users/my-profile");
     return res.data;
 };
+
+
+// GET /users get all users
+export const getAllUsersApi = async () => {
+    const res = await api.get("/users");
+    return res.data;
+};

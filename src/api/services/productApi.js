@@ -9,6 +9,5 @@ export const createProductApi = async (payload) => {
 
 export const getProductApi = async () => {
     const res = await api.get("/products");
-    console.log("Get products res: ", res)
     return res.data;
 };

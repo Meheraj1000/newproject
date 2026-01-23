@@ -3,7 +3,6 @@ import { api } from "../lib/api";
 // api.post("/deposits", { amount: 1000, payType: "bkash", trxID: "BK123" });
 export const createDepositeApi = async (payload) => {
     const res = await api.post("/deposits", payload);
-    console.log("Create deposits api response:", res)
     return res.data;
 };
 
@@ -16,7 +15,6 @@ export const getMyDepositsApi = async () => {
 // /deposits/status?status=PENDING
 export const getDepositeDepentOnStatusApi = async (status) => {
     const res = await api.get(`/deposits/status?status=${status}`);
-    console.log("Get deposits by status res: ", res)
     return res.data;
 };
 
