@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../AuthPage/AuthProvider";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const WithdrawPanding = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
   const [amount, setAmount] = useState("");
   const [withdrawInfo, setWithdrawInfo] = useState(null);

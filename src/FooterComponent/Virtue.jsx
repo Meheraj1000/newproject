@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 import { getMyInvestmentsApi } from "../api/services/investmentApi";
-import { getTotalHoursFromInvestDay } from "../utils/formatedDate";
+import { getTotalDaysFromInvestDay, getTotalHoursFromInvestDay } from "../utils/formatedDate";
 
 const Virtue = () => {
   const { user } = useAuth();
@@ -87,7 +87,7 @@ const Virtue = () => {
             const validPurchaseDate = isNaN(purchaseDate.getTime()) ? new Date() : purchaseDate;
 
             const getHours = getTotalHoursFromInvestDay(item?.createdAt);
-            const getDayFromInvest = getTotalHoursFromInvestDay(item?.createdAt)
+            const getDayFromInvest = getTotalDaysFromInvestDay(item?.createdAt)
 
 
             const purchaseDateString = validPurchaseDate.toLocaleDateString("en-GB");

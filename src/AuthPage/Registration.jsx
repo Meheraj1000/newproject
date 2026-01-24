@@ -8,6 +8,7 @@ const Registration = () => {
   const [password, setPassword] = useState("");
   const [referedCode, setReferedCode] = useState("");
   const [selfCode, setSelfCode] = useState("");
+  const [loading, setLoading] = useState(false);
 
 
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const Registration = () => {
 
   // ✅ onSubmit handler
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
 
     if (!selfCode) {
@@ -53,6 +55,8 @@ const Registration = () => {
         error?.response?.data?.errorSources[0]?.message || "রেজিস্ট্রেশন ব্যর্থ হয়েছে",
         "error"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,7 +89,6 @@ const Registration = () => {
         <input
           type="text"
           value={referedCode}
-          required
           onChange={(e) => setReferedCode(e.target.value)}
           placeholder="👤 আমন্ত্রণ কোড"
           className="w-full p-3 rounded border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
@@ -113,9 +116,11 @@ const Registration = () => {
 
         {/* Buttons */}
         <button
-          className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 rounded font-semibold"
+          className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 rounded font-semibold disabled:opacity-50"
+          disabled={loading}
         >
-          সাইন আপ
+          {loading ? <span className="loading loading-spinner loading-lg"></span>
+            : "সাইন আপ"}
         </button>
         <Link
           to="/login"

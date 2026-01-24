@@ -28,8 +28,8 @@ import PrivateRoute from "./AuthPage/PrivateRoute";
 import Admin from "./Admin/Admin";
 import User from "./Admin/User";
 import ProductsAdd from "./Admin/ProductsAdd";
-import { useAuth } from "./context/AuthContext";
 import { userRole } from "./constants";
+import { useAuth } from "./Context/AuthContext";
 
 function App() {
   const location = useLocation();

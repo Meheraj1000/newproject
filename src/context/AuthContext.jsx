@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
 
   const isAuthenticated = !!user;
 
-  // todo
   // ✅ App start: user load (token/cookie থাকলে)
   useEffect(() => {
     (async () => {
@@ -20,11 +19,10 @@ export const AuthProvider = ({ children }) => {
           setUser(null);
           return;
         }
-
         const res = await api.get("/users/my-profile");
         const profile = res.data?.data ?? res.data?.user ?? res.data;
         setUser(profile);
-      // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
       } catch (err) {
         setUser(null);
       } finally {
@@ -40,7 +38,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await loginApi({ mobile, password });
 
-      const loggedUser =  res.data?.user;
+      const loggedUser = res.data?.user;
 
       if (loggedUser) {
         setUser(loggedUser);

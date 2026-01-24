@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { AuthContext } from "../AuthPage/AuthProvider";
 import { getDepositeDepentOnStatusApi, updateDepositeStatusApi } from "../api/services/depositeApi";
 import { depositStatus, investmentStatus } from "../constants";
 import { getPendingInvestmentsAdminApi, updateInvestmentStatusAdminApi } from "../api/services/investmentApi";
@@ -11,7 +10,6 @@ const Admin = () => {
   const [withdrawRequests, setWithdrawRequests] = useState([]);
   const [loadingDeposits, setLoadingDeposits] = useState(false);
 
-  const { updateAnyUserByAdmin } = useContext(AuthContext);
 
   useEffect(() => {
     const loadDepositRequests = async () => {
@@ -54,17 +52,13 @@ const Admin = () => {
       console.log("Updated deposit:", updated);
 
       Swal.fire("অনুমোদিত", "পণ্য অনুমোদন হয়েছে", "success");
+      const updatedRequests = [...purchaseRequests];
+      updatedRequests.splice(index, 1);
+      setPurchaseRequests(updatedRequests);
     } catch (error) {
       console.error("Error updating deposit status:", error);
       Swal.fire("প্রত্যাখ্যান", "Problem hoise", "info");
     }
-    // const updatedDeposits = [...depositRequests];
-    // updatedDeposits.splice(index, 1);
-    // setDepositRequests(updatedDeposits);
-    const updatedRequests = [...purchaseRequests];
-    updatedRequests.splice(index, 1);
-    setPurchaseRequests(updatedRequests);
-
   };
 
   const handleDeposit = async (index, approve) => {
@@ -87,26 +81,38 @@ const Admin = () => {
 
 
   const handleWithdraw = (index, approve) => {
-    const withdraw = withdrawRequests[index];
-    if (!withdraw) return;
+    console.log("handleWithdraw", index, approve)
+    setWithdrawRequests([]);
+    
+    // const withdraw = withdrawRequests[index];
+    // if (!withdraw) return;
 
-    const updatedWithdraws = [...withdrawRequests];
-    updatedWithdraws.splice(index, 1);
-    setWithdrawRequests(updatedWithdraws);
-    localStorage.setItem("allWithdraws", JSON.stringify(updatedWithdraws));
+    // const updatedWithdraws = [...withdrawRequests];
+    // updatedWithdraws.splice(index, 1);
+    // setWithdrawRequests(updatedWithdraws);
+    // localStorage.setItem("allWithdraws", JSON.stringify(updatedWithdraws));
 
-    if (approve) {
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      const wUser = users.find((u) => u.phone === withdraw.userPhone);
-      if (wUser) {
-        wUser.balance = Number(wUser.balance || 0) - Number(withdraw.amount);
-        updateAnyUserByAdmin(wUser);
-      }
-      Swal.fire("Approved", "Withdraw সফল হয়েছে", "success");
-    } else {
-      Swal.fire("Rejected", "Withdraw বাতিল করা হয়েছে", "info");
-    }
+    // if (approve) {
+    //   const users = JSON.parse(localStorage.getItem("users")) || [];
+    //   const wUser = users.find((u) => u.phone === withdraw.userPhone);
+    //   if (wUser) {
+    //     wUser.balance = Number(wUser.balance || 0) - Number(withdraw.amount);
+    //     updateAnyUserByAdmin(wUser);
+    //   }
+    //   Swal.fire("Approved", "Withdraw সফল হয়েছে", "success");
+    // } else {
+    //   Swal.fire("Rejected", "Withdraw বাতিল করা হয়েছে", "info");
+    // }
   };
+
+  if (loadingDeposits) {
+    // ✅ Wait for auth check
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        লোড হচ্ছে...
+      </div>
+    );
+  }
 
   // ================= CARD COMPONENT =================
   const RequestCard = ({ children }) => (

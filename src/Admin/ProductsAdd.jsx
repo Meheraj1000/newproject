@@ -45,15 +45,12 @@ const ProductsAdd = ({ balance = 0 }) => {
 
 
 
+  // show products grid by store localstorage
   const handleBuyRequest = (item) => {
     if (balance < Number(item?.price)) {
       Swal.fire("ত্রুটি!", "অপর্যাপ্ত ব্যালেন্স!", "error");
       return;
     }
-    const allRequests = JSON.parse(localStorage.getItem("allRequests")) || [];
-    allRequests.push({ ...item, userAction: "pending" });
-    localStorage.setItem("allRequests", JSON.stringify(allRequests));
-    Swal.fire("অনুরোধ পাঠানো হয়েছে!", "অ্যাডমিন অনুমোদন করবেন।", "info");
   };
 
   return (

@@ -6,7 +6,7 @@ export const registerUserApi = async (payload) => {
     return res.data;
 };
 
-// GET /users/my-profile (তুমি বলেছো token লাগবে না)
+// GET /users/my-profile 
 export const myProfileApi = async () => {
     const res = await api.get("/users/my-profile");
     return res.data;
