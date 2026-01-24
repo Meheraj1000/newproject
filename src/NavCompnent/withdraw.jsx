@@ -48,7 +48,7 @@ const Withdraw = () => {
         <input
           type="text"
           name="name"
-          placeholder="আপনার নাম"
+          placeholder="আপনার অ্যাকাউন্ট নাম"
           value={form.name}
           onChange={handleChange}
           className="w-full border p-3 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -58,7 +58,7 @@ const Withdraw = () => {
         <input
           type="text"
           name="bank"
-          placeholder="bkash / nagad / rocket"
+          placeholder="বিকাশ / নগত / রকেট"
           value={form.bank}
           onChange={handleChange}
           className="w-full border p-3 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -68,7 +68,7 @@ const Withdraw = () => {
         <input
           type="text"
           name="account"
-          placeholder="01XXXXXXXXX"
+          placeholder="অ্যাকাউন্ট আইডি"
           value={form.account}
           onChange={handleChange}
           className="w-full border p-3 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -78,7 +78,7 @@ const Withdraw = () => {
         <input
           type="text"
           name="mobile"
-          placeholder="+8801XXXXXXXX"
+          placeholder="বিকাশ নাম্বার / নগত নাম্বার / রকেট নাম্বার"
           value={form.mobile}
           onChange={handleChange}
           className="w-full border p-3 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"

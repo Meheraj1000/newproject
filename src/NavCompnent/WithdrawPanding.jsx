@@ -81,8 +81,8 @@ const WithdrawPanding = () => {
         <div className="bg-gray-100 p-3 rounded mt-4 text-sm">
           <p>নাম: {withdrawInfo.name}</p>
           <p>ব্যাংক: {withdrawInfo.bank}</p>
-          <p>অ্যাকাউন্ট: {withdrawInfo.account}</p>
-          <p>মোবাইল: {withdrawInfo.mobile}</p>
+          <p>অ্যাকাউন্ট আইডি: {withdrawInfo.account}</p>
+          <p>ব্যাংক মোবাইল: {withdrawInfo.mobile}</p>
         </div>
       )}
 
