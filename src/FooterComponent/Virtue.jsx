@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../Context/AuthContext";
 import { getMyInvestmentsApi } from "../api/services/investmentApi";
 import { getTotalDaysFromInvestDay, getTotalHoursFromInvestDay } from "../utils/formatedDate";
 
 const Virtue = () => {
-  const { user } = useAuth();
-  const [now, setNow] = useState(new Date());
   const [savedVirtues, setSavedVirtues] = useState([]);
 
-  /* ================= REAL-TIME CLOCK ================= */
-  useEffect(() => {
-    const timer = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   /* ================= FETCH VIRTUES ================= */
   useEffect(() => {
@@ -30,34 +22,6 @@ const Virtue = () => {
   }, []);
   console.log("Saved virtues: ", savedVirtues);
 
-  /* ================= DAILY INCOME ONCE PER DAY ================= */
-  useEffect(() => {
-    if (!user || !savedVirtues?.length) return;
-
-    const todayKey = `lastDailyIncome_${user.phone}`;
-    const lastDate = localStorage.getItem(todayKey);
-    const todayStr = now.toISOString().split("T")[0]; // "YYYY-MM-DD"
-
-    // যদি আজকের date ইতিমধ্যেই যোগ হয়ে থাকে, আর কিছু করবে না
-    if (lastDate === todayStr) return;
-
-    let totalDailyIncome = 0;
-
-    savedVirtues.forEach((item) => {
-      const dailyIncome = Number((item.price || 0).toString().replace(/,/g, ""));
-      totalDailyIncome += dailyIncome;
-    });
-
-    if (totalDailyIncome > 0) {
-      // setUser((prev) => ({
-      //   ...prev,
-      //   balance: (Number(prev.balance) || 0) + totalDailyIncome,
-      // }));
-
-      // আজকের তারিখ localStorage-এ রাখলাম
-      // localStorage.setItem(todayKey, todayStr);
-    }
-  }, [now, savedVirtues, user]);
 
   return (
     <div className="w-full bg-gray-100 min-h-screen">
@@ -78,7 +42,7 @@ const Virtue = () => {
           <p className="text-gray-500 text-center">আপনি এখনও কিছু কেনেননি।</p>
         ) : (
           savedVirtues?.map((item, index) => {
-            const dailyIncome = Number(item?.productId?.dailyProfit || 0);
+            const dailyIncome = Number(item?.productId?.dailyProfit || 0); console.log("Daily Income:", item);
             const productPrice = Number(item.amount || 0);
             const totalDays = item.productId?.investmentDayCycle || 0;
 
@@ -102,40 +66,42 @@ const Virtue = () => {
                 </div>
 
                 {/* Stats */}
-                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mt-3">
+                <div className="flex justify-between sm:flex-row items-end gap-4 sm:gap-6 mt-3">
                   {/* Image */}
-                  <div className="flex-shrink-0">
+                  <div className="flex gap-3">
                     <img
                       src={item?.productId?.image || ""}
                       alt={item?.productId?.title}
                       className="w-full max-w-[120px] sm:max-w-[150px] md:max-w-[180px] h-auto object-cover rounded-xl shadow-sm"
                     />
+                    {/* Product Info */}
+                    <div className="text-start">
+                      <h3 className="text-md sm:text-lg md:text-xl font-semibold text-black">{item?.productId?.title || "Unnamed"}</h3>
+
+                      <div className="text-start mt-2">
+
+                        <p className="text-gray-600 text-xs sm:text-sm">দৈনিক আয়</p>
+                        <h3 className="text-indigo-600 font-semibold">Tk {dailyIncome.toFixed(2)}</h3>
+
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-gray-500 font-medium">Hours Worked: {getHours}</p>
+                    </div>
                   </div>
 
-                  {/* Daily Income & Total Profit */}
-                  <div className="flex flex-1 justify-around sm:justify-between w-full">
-                    <div className="text-center">
-                      <h3 className="text-indigo-600 font-bold text-lg sm:text-xl md:text-2xl">Tk {dailyIncome.toFixed(2)}</h3>
-                      <p className="text-gray-600 text-xs sm:text-sm">দৈনিক আয়</p>
-                    </div>
-
-                    <div className="text-center">
-                      <h3 className="text-green-600 font-bold text-lg sm:text-xl md:text-2xl">Tk {item?.productId?.totalProfit}</h3>
-                      <p className="text-gray-600 text-xs sm:text-sm">মোট আয়</p>
-                    </div>
+                  {/*Total Profit */}
+                  <div className="text-center">
+                    <h3 className="text-green-600 font-bold text-lg sm:text-xl md:text-2xl">Tk {item?.productId?.totalProfit}</h3>
+                    <p className="text-gray-600 text-xs sm:text-sm">মোট আয়</p>
                   </div>
                 </div>
 
-                {/* Product Info */}
-                <div className="mt-4 text-start">
-                  <h3 className="text-md sm:text-lg md:text-xl font-semibold text-black">{item?.productId?.title || "Unnamed"}</h3>
-                  <p className="text-xs sm:text-sm text-gray-500 font-medium">Hours Worked: {getHours}</p>
-                </div>
+
 
                 {/* Progress / Stats */}
                 <div className="flex flex-col sm:flex-row justify-between gap-2 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-indigo-600 to-purple-500 text-white text-sm sm:text-base mt-4 rounded-lg shadow-md">
                   <span>সময়কাল: {getDayFromInvest} / {totalDays} দিন</span>
-                  <span>পণ্যের মূল্য : Tk {productPrice.toFixed(2)}</span>
+                  <span>পণ্যের মূল্য : Tk {productPrice}</span>
                   <span>মোট অর্জন : Tk {item?.productId?.dailyProfit * Number(getDayFromInvest)}</span>
                 </div>
               </div>
