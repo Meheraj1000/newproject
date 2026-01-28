@@ -11,7 +11,7 @@ const Banner = () => {
   ];
 
   return (
-    <section className="w-full p-4 bg-white shadow-md">
+    <section className="w-full  bg-white shadow-md">
       <div className="carousel w-full rounded-md overflow-hidden">
         {slides?.map((src, index) => {
           const slideId = `slide${index + 1}`;

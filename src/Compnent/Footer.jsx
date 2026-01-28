@@ -15,7 +15,7 @@ const Footer = ({ isAdmin }) => {
   ];
 
   return (
-    <nav className="bg-white shadow-md w-full">
+<nav className="bg-white fixed bottom-0 left-0 z-50 shadow-md w-full">
       <ul className="flex justify-between items-center px-4 py-3 overflow-x-auto">
         {navItems?.map((item, index) => (
           <li key={index} className="flex-1 text-center">

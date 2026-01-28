@@ -10,7 +10,7 @@ const NavBar = () => {
   ];
 
   return (
-    <nav className="bg-white shadow-md w-full">
+    <nav className="bg-white  w-full">
       <ul className="flex flex-nowrap justify-between items-center gap-2 px-4 py-3 text-lg font-semibold">
         {navItems?.map((item, index) => (
           <li key={index} className="flex-1 min-w-0 text-center">
