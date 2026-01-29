@@ -62,17 +62,17 @@ const Profile = () => {
         <div>
           <p className="text-sm font-semibold">{user?.mobile}</p>
           <p className="text-xs text-purple-500 mt-1">ID: {user?.selfCode}</p>
-
-          <p className="text-indigo-600 font-bold mt-2 leading-tight text-lg">
-            Tk {user?.balance || 0}
-            <br />
-            <span className="text-gray-600 text-xs font-normal">
-              বর্তমান ব্যালেন্স
-            </span>
-          </p>
+            <p className="text-indigo-600 font-bold mt-2 leading-tight text-lg">
+              Tk {user?.balance || 0}
+              <br />
+              <span className="text-gray-600 text-xs font-normal">
+                বর্তমান ব্যালেন্স
+              </span>
+            </p>
         </div>
 
         <div className="flex gap-6 sm:gap-8 text-right">
+                    
           <div className="text-indigo-600 font-semibold leading-tight text-sm">
             চেক করা <br />
             <span className="text-gray-600 text-xs font-normal">
@@ -116,7 +116,7 @@ const Profile = () => {
           <Link
             key={step.id}
             to="/bonus"
-            className="block bg-white rounded-2xl p-4 shadow-md flex gap-3 relative hover:shadow-lg transition duration-200"
+            className="block bg-white rounded-2xl p-4 shadow-md flex items-center gap-3 relative hover:shadow-lg transition duration-200"
           >
             <div className="w-20 h-20 sm:w-24 sm:h-24 bg-indigo-50 rounded-xl flex items-center justify-center shrink-0">
               <img
@@ -127,10 +127,10 @@ const Profile = () => {
             </div>
 
             <div className="flex-1">
-              <h2 className="text-lg sm:text-xl font-bold leading-tight">
+              <h2 className=" pt-3 font-bold leading-tight">
                 {step.title}
               </h2>
-              <p className="text-gray-600 text-sm sm:text-base mt-1">
+              <p className="text-gray-600 text-sm sm:text-base">
                 {step.desc}
               </p>
             </div>

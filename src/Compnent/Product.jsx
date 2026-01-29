@@ -91,7 +91,7 @@ const Products = () => {
           products?.map((item, index) => (
             <div
               key={index}
-              className="rounded-lg shadow bg-white dark:bg-gray-800 overflow-hidden border border-gray-200 dark:border-gray-700"
+              className="rounded-2xl  shadow bg-white dark:bg-gray-800 overflow-hidden border border-gray-200 dark:border-gray-700"
             >
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 p-4 relative">
                 <div className="flex gap-3 items-start sm:items-center flex-1">
