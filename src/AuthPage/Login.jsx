@@ -4,8 +4,8 @@ import Swal from "sweetalert2";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
-  const [phone, setPhone] = useState(""); // 01401606882
-  const [password, setPassword] = useState(""); // 12345678
+  const [phone, setPhone] = useState("01401606882"); // 01401606882
+  const [password, setPassword] = useState("12345678"); // 12345678
   const navigate = useNavigate();
   const { login, loading } = useAuth();
 

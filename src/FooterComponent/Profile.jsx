@@ -44,8 +44,6 @@ const menuItems = [
 const Profile = () => {
   const { user, logout } = useAuth();
 
-  console.log(user); // todo : show into the UI
-
   const handleLogout = () => {
     logout();
   };

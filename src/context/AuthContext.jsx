@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { api, getAccessToken, setAccessToken } from "../api/lib/api";
+import { getAccessToken, setAccessToken } from "../api/lib/api";
 import { loginApi, logoutApi } from "../api/services/authApi";
+import { myProfileApi } from "../api/services/userApi";
 
 const AuthContext = createContext(null);
 
@@ -19,8 +20,8 @@ export const AuthProvider = ({ children }) => {
           setUser(null);
           return;
         }
-        const res = await api.get("/users/my-profile");
-        const profile = res.data?.data ?? res.data?.user ?? res.data;
+        const res = await myProfileApi();
+        const profile = res?.data;
         setUser(profile);
         // eslint-disable-next-line no-unused-vars
       } catch (err) {
@@ -30,6 +31,8 @@ export const AuthProvider = ({ children }) => {
       }
     })();
   }, []);
+  console.log("AuthContext: user=", user);
+
 
 
   // ✅ login: accessToken store + user set
@@ -43,8 +46,8 @@ export const AuthProvider = ({ children }) => {
       if (loggedUser) {
         setUser(loggedUser);
       } else {
-        const me = await api.get("/users/my-profile");
-        setUser(me.data?.data ?? me.data?.user ?? me.data);
+        const me = await myProfileApi();
+        setUser(me?.data);
       }
 
       return { success: true, data: res.data };

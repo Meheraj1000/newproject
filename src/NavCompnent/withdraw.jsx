@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { createWithdrawApi } from "../api/services/withdraw";
 import Swal from "sweetalert2";
+import { useAuth } from "../context/AuthContext";
 
 const Withdraw = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [form, setForm] = useState({
     name: "",
@@ -26,7 +27,6 @@ const Withdraw = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Withdraw form submitted:", form);
     const withdrawData = {
       ...form,
       amount: Number(form.amount),
@@ -34,6 +34,18 @@ const Withdraw = () => {
     try {
       await createWithdrawApi(withdrawData);
       // navigate("/WithdrawPanding");
+      Swal.fire({
+        icon: "success",
+        title: "সফলভাবে রিকোয়েস্ট!",
+        text: "টাকা উত্তোলনের জন্য রিকোয়েস্ট সফল হয়েছে।",
+      })
+      setForm({
+        name: "",
+        paymentType: "",
+        paymentNumber: "",
+        amount: 0,
+      })
+
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -51,6 +63,14 @@ const Withdraw = () => {
       <h2 className="text-center text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-500 text-white py-2 rounded">
         অ্যাকাউন্ট তথ্য
       </h2>
+
+      {/* Balance Info */}
+      <div className="bg-indigo-50 p-4 mt-4 rounded">
+        <p className="font-bold text-indigo-700">বর্তমান ব্যালেন্স</p>
+        <p className="text-2xl text-indigo-900 font-semibold">
+          Tk {user?.balance}
+        </p>
+      </div>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         {/* Name */}
@@ -85,6 +105,10 @@ const Withdraw = () => {
           onChange={handleChange}
           className="w-full border p-3 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
+        {/* Hint Text */}
+        {/* <p className="text-sm text-gray-500 mt-0 text-start">
+          সর্বনিম্ন উত্তোলনের পরিমাণ ৫০০ টাকা
+        </p> */}
 
         {/* Mobile */}
         <input

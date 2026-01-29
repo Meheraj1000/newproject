@@ -3,12 +3,14 @@ import Swal from "sweetalert2";
 import { getDepositeDepentOnStatusApi, updateDepositeStatusApi } from "../api/services/depositeApi";
 import { depositStatus, investmentStatus } from "../constants";
 import { getPendingInvestmentsAdminApi, updateInvestmentStatusAdminApi } from "../api/services/investmentApi";
+import { useAuth } from "../context/AuthContext";
 
 const Admin = () => {
   const [purchaseRequests, setPurchaseRequests] = useState([]);
   const [depositRequests, setDepositRequests] = useState([]);
   const [withdrawRequests, setWithdrawRequests] = useState([]);
   const [loadingDeposits, setLoadingDeposits] = useState(false);
+  const { setUser } = useAuth();
 
 
   useEffect(() => {
@@ -49,7 +51,7 @@ const Admin = () => {
     try {
       const res = await updateInvestmentStatusAdminApi(purchase._id, approve);
       const updated = res?.data ?? res;
-      console.log("Updated deposit:", updated);
+      setUser(updated?.userId); // Update user data in context
 
       Swal.fire("অনুমোদিত", "পণ্য অনুমোদন হয়েছে", "success");
       const updatedRequests = [...purchaseRequests];
@@ -68,8 +70,9 @@ const Admin = () => {
     try {
       const res = await updateDepositeStatusApi(deposit._id, approve);
       const updated = res?.data ?? res;
-      console.log("Updated deposit:", updated);
-      Swal.fire("সফল", "ব্যালেন্স যোগ হয়েছে" | "Deposit request প্রত্যাখ্যান করা হয়েছে", "success");
+      setUser(updated?.userId); 
+
+      Swal.fire("সফল", "ব্যালেন্স যোগ হয়েছে" | "Deposit request প্রত্যাখ্যান করা হয়েছে", "success");
     } catch (error) {
       console.error("Error updating deposit status:", error);
       Swal.fire("প্রত্যাখ্যান", "Problem hoise", "info");
