@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createWithdrawApi } from "../api/services/withdraw";
+import Swal from "sweetalert2";
 
 const Withdraw = () => {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
     name: "",
-    bank: "",
-    account: "",
-    mobile: "",
+    paymentType: "",
+    paymentNumber: "",
+    amount: 0,
   });
 
-  const [captcha, setCaptcha] = useState(
-    Math.random().toString(36).substring(2, 8)
-  );
+  // const [captcha, setCaptcha] = useState(
+  //   Math.random().toString(36).substring(2, 8)
+  // );
 
   const handleChange = (e) => {
     setForm({
@@ -22,18 +24,25 @@ const Withdraw = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!form.name || !form.bank || !form.account || !form.mobile) {
-      alert("সব ঘর পূরণ করুন!");
-      return;
+    console.log("Withdraw form submitted:", form);
+    const withdrawData = {
+      ...form,
+      amount: Number(form.amount),
+    }
+    try {
+      await createWithdrawApi(withdrawData);
+      // navigate("/WithdrawPanding");
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "সমস্যা!",
+        text: error?.response?.data?.errorSources?.[0]?.message || "সমস্যা হয়েছে।",
+      });
     }
 
-    // ✅ Withdraw bank info save
-    localStorage.setItem("withdrawDraft", JSON.stringify(form));
 
-    navigate("/WithdrawPanding");
   };
 
   return (
@@ -46,6 +55,7 @@ const Withdraw = () => {
       <form onSubmit={handleSubmit} className="mt-6 space-y-4">
         {/* Name */}
         <input
+          required
           type="text"
           name="name"
           placeholder="আপনার অ্যাকাউন্ট নাম"
@@ -56,36 +66,39 @@ const Withdraw = () => {
 
         {/* Bank */}
         <input
+          required
           type="text"
-          name="bank"
-          placeholder="বিকাশ / নগত / রকেট"
-          value={form.bank}
+          name="paymentType"
+          placeholder="বিকাশ / নগদ / রকেট"
+          value={form.paymentType}
           onChange={handleChange}
           className="w-full border p-3 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
-        {/* Account */}
+        {/* amount */}
         <input
+          required
           type="text"
-          name="account"
-          placeholder="অ্যাকাউন্ট আইডি"
-          value={form.account}
+          name="amount"
+          placeholder="উত্তোলনের পরিমাণ"
+          value={form.amount}
           onChange={handleChange}
           className="w-full border p-3 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
         {/* Mobile */}
         <input
+          required
           type="text"
-          name="mobile"
-          placeholder="বিকাশ নাম্বার / নগত নাম্বার / রকেট নাম্বার"
-          value={form.mobile}
+          name="paymentNumber"
+          placeholder="বিকাশ / নগদ / রকেট নাম্বার"
+          value={form.paymentNumber}
           onChange={handleChange}
           className="w-full border p-3 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
         {/* Captcha */}
-        <div className="flex gap-3 items-center">
+        {/* <div className="flex gap-3 items-center">
           <span className="font-bold text-lg">{captcha}</span>
           <button
             type="button"
@@ -96,7 +109,7 @@ const Withdraw = () => {
           >
             Refresh
           </button>
-        </div>
+        </div> */}
 
         {/* Submit Button */}
         <button

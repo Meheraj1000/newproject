@@ -6,7 +6,6 @@ export const loginApi = async ({ mobile, password }) => {
 
     const token = res.data?.data?.accessToken;
     if (token) setAccessToken(token);
-    console.log("Login response:", res);
     return res.data;
 };
 
@@ -14,6 +13,5 @@ export const loginApi = async ({ mobile, password }) => {
 export const logoutApi = async () => {
     const res = await api.post("/auth/logout");
     setAccessToken(null);
-    console.log("Logout response:", res);
     return res.data;
 };
