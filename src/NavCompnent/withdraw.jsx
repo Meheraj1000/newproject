@@ -101,7 +101,7 @@ const Withdraw = () => {
           type="text"
           name="amount"
           placeholder="উত্তোলনের পরিমাণ"
-          value={form.amount}
+          value={form.amount ? form.amount : ""}
           onChange={handleChange}
           className="w-full border p-3 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
