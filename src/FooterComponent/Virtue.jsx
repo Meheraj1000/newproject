@@ -24,7 +24,7 @@ const Virtue = () => {
 
 
   return (
-    <div className="w-full bg-gray-100 min-h-screen">
+    <div className="w-full pb-10 bg-gray-100 min-h-screen">
       {/* Header */}
       <div className="bg-gradient-to-r from-indigo-600 to-purple-500 text-white p-4 font-semibold shadow-md flex items-center justify-between relative">
         <Link to="/" className="flex items-center gap-1 text-white text-lg hover:opacity-80">

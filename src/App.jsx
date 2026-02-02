@@ -90,7 +90,7 @@ function App() {
       </p>
 
       <a
-        href="https://t.me/+030i31XPhlw0OWFl"
+        href="https://t.me/+uo7WHq7dtQc4MWE1"
         style="
           display:inline-flex;
           align-items:center;
